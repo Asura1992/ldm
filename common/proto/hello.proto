@@ -1,0 +1,21 @@
+syntax = "proto3";
+package hello;
+option go_package = "./protos/hello;hello";
+import "google/api/annotations.proto";
+//打招呼服务
+service Hello{
+    rpc Hello(HelloReq) returns(HelloRsp){
+        option (google.api.http) = {
+            post: "/hello/hello"
+            body: "*"
+        };
+    };
+}
+message HelloReq{
+    string name = 1;
+}
+message HelloRsp{
+    string msg = 1;
+}
+
+

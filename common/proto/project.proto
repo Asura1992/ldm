@@ -1,0 +1,21 @@
+syntax = "proto3";
+package project;
+option go_package = "./protos/project;project";
+import "google/api/annotations.proto";
+//项目服务
+service Project{
+    rpc GetProject(GetProjectReq) returns(GetProjectRsp){
+        option (google.api.http) = {
+            post: "/project/getProject"
+            body: "*"
+        };
+    };
+}
+message GetProjectReq{
+    string name = 1;
+}
+message GetProjectRsp{
+    string msg = 1;
+}
+
+
