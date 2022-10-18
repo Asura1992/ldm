@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 type config struct {
-	Etcd 		Etcd 	`mapstructure:"etcd"`
-	HttpPort  	int		`mapstructure:"http_port"`
+	Etcd     Etcd `mapstructure:"etcd"`
+	HttpPort int  `mapstructure:"http_port"`
 }
 type Etcd struct {
 	Address		string `mapstructure:"address"`

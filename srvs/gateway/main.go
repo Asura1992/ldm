@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 	"ldm/common/constant"
-	"ldm/common/initalize"
 	"ldm/common/proto/gateway/protos/hello"
 	"ldm/common/proto/gateway/protos/project"
+	"ldm/initalize"
 	"log"
 	"net/http"
 	"strings"
@@ -44,7 +44,7 @@ func run() error {
 		return err
 	}
 	fmt.Println("gateway http listen on :" , initalize.GlobalConfig.HttpPort)
-	return http.ListenAndServe(fmt.Sprintf(":%d",initalize.GlobalConfig.HttpPort), mux)
+	return http.ListenAndServe(fmt.Sprintf(":%d", initalize.GlobalConfig.HttpPort), mux)
 }
 //注册服务端点供http调用
 func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux,opts []grpc.DialOption) error{
