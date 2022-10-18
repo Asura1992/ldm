@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"github.com/go-micro/plugins/v4/registry/etcd"
@@ -66,8 +65,6 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
 				err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 			case constant.API_HELLO_SRV://hello服务
 				err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
-			default:
-				return errors.New("srv.Name 服务漏注册了，请解决")
 			}
 			if err != nil {
 				return err
