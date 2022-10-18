@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-micro/plugins/v4/registry/etcd"
-	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"go-micro.dev/v4/registry"
 	"google.golang.org/grpc"
@@ -59,7 +58,7 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux,opts []grpc.D
 	//遍历所有etcd注册的服务
 	for _,srv := range regSrvs{
 		for _,node := range srv.Nodes{
-			endpoint := flag.String(srv.Name + uuid.New().String(),node.Address, srv.Name)
+			endpoint := flag.String(srv.Name,node.Address, srv.Name)
 			switch srv.Name {
 			case constant.API_PROJECT_SRV://项目服务
 				err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)

@@ -8,7 +8,6 @@ import (
 	"ldm/common/protos/hello"
 	"ldm/initalize"
 	"ldm/srvs/hello/impl"
-	"go-micro.dev/v4/server"
 	"log"
 	"strings"
 	"time"
@@ -27,7 +26,7 @@ func main(){
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))),
 		)
 	//优雅关闭服务
-	service.Server().Init(server.Wait(nil))
+	service.Init()
 	if err := hello.RegisterHelloHandler(service.Server(),impl.NewHelloImplImpl(service.Client()));err != nil{
 		log.Fatal(err)
 	}
