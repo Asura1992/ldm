@@ -24,7 +24,7 @@ import (
 func run() error {
 	ctx := context.Background()
 	//超时时间为1分钟
-	ctx, cancel := context.WithTimeout(ctx,time.Minute)
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	mux := runtime.NewServeMux(runtime.WithMarshalerOption(
 		runtime.MIMEWildcard,
@@ -38,15 +38,18 @@ func run() error {
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
-	opts := []grpc.DialOption{grpc.WithInsecure(),grpc.WithBlock()}
-	if err := RegisterSrvEndpoint(ctx,mux,opts);err != nil{
+	if err := RegisterSrvEndpoint(ctx,mux);err != nil{
 		return err
 	}
 	fmt.Println("gateway http listen on :" , initalize.GlobalConfig.HttpPort)
-	return http.ListenAndServe(fmt.Sprintf(":%d", initalize.GlobalConfig.HttpPort), mux)
+	return http.ListenAndServe(
+		fmt.Sprintf(":%d", initalize.GlobalConfig.HttpPort),
+		http.TimeoutHandler(mux,time.Minute * time.Duration(initalize.GlobalConfig.HttpTimeout),"api request timeout!!"),
+		)
 }
 //注册服务端点供http调用
-func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux,opts []grpc.DialOption) error{
+func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
+	opts := []grpc.DialOption{grpc.WithBlock(),grpc.WithInsecure()}
 	cfg := initalize.GlobalConfig
 	reg := etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))
 	regSrvs,err := reg.ListServices(func(options *registry.ListOptions) {

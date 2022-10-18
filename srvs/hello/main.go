@@ -25,7 +25,6 @@ func main(){
 		micro.RegisterTTL(time.Second * 30),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))),
 		)
-	//优雅关闭服务
 	service.Init()
 	if err := hello.RegisterHelloHandler(service.Server(),impl.NewHelloImplImpl(service.Client()));err != nil{
 		log.Fatal(err)
