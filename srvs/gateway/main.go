@@ -23,7 +23,6 @@ import (
 
 func run() error {
 	ctx := context.Background()
-	//超时时间为1分钟
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	mux := runtime.NewServeMux(runtime.WithMarshalerOption(
