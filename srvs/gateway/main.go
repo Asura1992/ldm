@@ -75,14 +75,6 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux,opts []grpc.D
 			fmt.Println(srv.Name + " 服务注册端点地址 "+node.Address)
 		}
 	}
-	go func() {
-		for{
-			time.Sleep(time.Second * 2)
-			reg.Watch(func(options *registry.WatchOptions) {
-				fmt.Println("11111111")
-			})
-		}
-	}()
 	return nil
 }
 
