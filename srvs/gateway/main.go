@@ -49,7 +49,6 @@ func run() error {
 }
 //注册服务端点供http调用
 func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
-	opts := []grpc.DialOption{grpc.WithBlock(),grpc.WithInsecure()}
 	cfg := initalize.GlobalConfig
 	reg := etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))
 	regSrvs,err := reg.ListServices(func(options *registry.ListOptions) {
@@ -58,6 +57,7 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
 	if err != nil{
 		log.Fatal(err)
 	}
+	opts := []grpc.DialOption{grpc.WithInsecure(),grpc.WithBlock()}
 	//遍历所有etcd注册的服务
 	for _,srv := range regSrvs{
 		for _,node := range srv.Nodes{
@@ -65,7 +65,6 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
 			switch srv.Name {
 			case constant.API_PROJECT_SRV://项目服务
 				err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
-
 			case constant.API_HELLO_SRV://hello服务
 				err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 			default:
