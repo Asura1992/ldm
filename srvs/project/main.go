@@ -4,6 +4,7 @@ import (
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/registry"
+	grpcsvr "github.com/go-micro/plugins/v4/server/grpc"
 	"ldm/common/constant"
 	"ldm/common/protos/project"
 	"ldm/initalize"
@@ -20,6 +21,7 @@ func main(){
 	}
 	cfg := initalize.GlobalConfig
 	service := micro.NewService(
+		micro.Server(grpcsvr.NewServer()),//这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(constant.API_PROJECT_SRV),
 		micro.RegisterInterval(time.Second * 10),
 		micro.RegisterTTL(time.Second * 5),

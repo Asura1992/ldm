@@ -34,6 +34,7 @@ require (
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
 	github.com/go-log/log v0.1.0 // indirect
 	github.com/go-micro/plugins/v4/registry/etcd v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/server/grpc v1.1.1 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.0.4 // indirect

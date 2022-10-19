@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-micro/plugins/v4/registry/etcd"
+	grpcsvr "github.com/go-micro/plugins/v4/server/grpc"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/registry"
 	"ldm/common/constant"
@@ -20,6 +21,7 @@ func main(){
 	}
 	cfg := initalize.GlobalConfig
 	service := micro.NewService(
+		micro.Server(grpcsvr.NewServer()),//这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(constant.API_HELLO_SRV),
 		micro.RegisterInterval(time.Second * 15),
 		micro.RegisterTTL(time.Second * 30),
