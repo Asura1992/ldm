@@ -40,9 +40,11 @@ func run() error {
 		return err
 	}
 	fmt.Println("gateway http listen on :" , initalize.GlobalConfig.HttpPort)
+	listenAddr := fmt.Sprintf(":%d",initalize.GlobalConfig.HttpPort)
+	connectTimeout := time.Second * time.Duration(initalize.GlobalConfig.HttpTimeout)
 	return http.ListenAndServe(
-		fmt.Sprintf(":%d", initalize.GlobalConfig.HttpPort),
-		http.TimeoutHandler(mux,time.Minute * time.Duration(initalize.GlobalConfig.HttpTimeout),"api request timeout!!"),
+		listenAddr,
+		http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"),
 		)
 }
 //注册服务端点供http调用
