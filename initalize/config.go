@@ -1,7 +1,6 @@
 package initalize
 
 import (
-	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -30,7 +29,6 @@ func InitGlobalConfig()error{
 	// 动态监控变化
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
-		fmt.Println("配置文件产生变化：%s", in.Name)
 		_ = v.ReadInConfig()
 		_ = v.Unmarshal(&GlobalConfig)
 	})
