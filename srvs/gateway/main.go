@@ -57,7 +57,7 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
 	if err != nil{
 		log.Fatal(err)
 	}
-	opts := []grpc.DialOption{grpc.WithInsecure(),grpc.WithBlock()}
+	opts := []grpc.DialOption{grpc.WithInsecure()}
 	//遍历所有etcd注册的服务
 	for _,srv := range regSrvs{
 		for _,node := range srv.Nodes{
