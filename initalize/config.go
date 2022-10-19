@@ -3,17 +3,10 @@ package initalize
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"ldm/common/config"
 )
-type config struct {
-	Etcd     		Etcd `mapstructure:"etcd"`
-	HttpPort 		int  `mapstructure:"http_port"`
-	HttpTimeout 	int  `mapstructure:"http_timeout"`
-}
-type Etcd struct {
-	Address		string `mapstructure:"address"`
-}
-//全局配置
-var GlobalConfig config
+
+
 //获取配置
 func InitGlobalConfig()error{
 	configFileName := "config.yaml"
@@ -23,14 +16,14 @@ func InitGlobalConfig()error{
 	if err := v.ReadInConfig(); err != nil {
 		return  err
 	}
-	if err := v.Unmarshal(&GlobalConfig);err != nil{
+	if err := v.Unmarshal(&config.GlobalConfig);err != nil{
 		return  err
 	}
 	// 动态监控变化
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
 		_ = v.ReadInConfig()
-		_ = v.Unmarshal(&GlobalConfig)
+		_ = v.Unmarshal(&config.GlobalConfig)
 	})
 	return nil
 }

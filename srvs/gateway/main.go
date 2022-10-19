@@ -9,6 +9,7 @@ import (
 	"go-micro.dev/v4/registry"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
+	"ldm/common/config"
 	"ldm/common/constant"
 	"ldm/common/proto/gateway/protos/hello"
 	"ldm/common/proto/gateway/protos/project"
@@ -39,17 +40,14 @@ func run() error {
 	if err := RegisterSrvEndpoint(ctx,mux);err != nil{
 		return err
 	}
-	fmt.Println("gateway http listen on :" , initalize.GlobalConfig.HttpPort)
-	listenAddr := fmt.Sprintf(":%d",initalize.GlobalConfig.HttpPort)
-	connectTimeout := time.Second * time.Duration(initalize.GlobalConfig.HttpTimeout)
-	return http.ListenAndServe(
-		listenAddr,
-		http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"),
-		)
+	fmt.Println("gateway http listen on :" , config.GlobalConfig.HttpPort)
+	listenAddr := fmt.Sprintf(":%d",config.GlobalConfig.HttpPort)
+	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
+	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"))
 }
 //注册服务端点供http调用
 func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
-	cfg := initalize.GlobalConfig
+	cfg := config.GlobalConfig
 	reg := etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))
 	regSrvs,err := reg.ListServices(func(options *registry.ListOptions) {
 		options.Context = ctx
