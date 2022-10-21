@@ -5,6 +5,7 @@ import (
 	"ldm/common/protos/project"
 	"ldm/initalize"
 	"ldm/srvs/project/impl"
+	"github.com/go-micro/plugins/v4/client/grpc"
 	"log"
 )
 
@@ -14,7 +15,7 @@ func main(){
 	//初始化数据库
 	initalize.InitMysql()
 	service :=initalize.InitService(constant.API_PROJECT_SRV)
-	if err := project.RegisterProjectHandler(service.Server(),impl.NewProjectImpl(service.Client()));err != nil{
+	if err := project.RegisterProjectHandler(service.Server(),impl.NewProjectImpl(grpc.NewClient()));err != nil{
 		log.Fatal(err)
 	}
 	if err := service.Run();err != nil{

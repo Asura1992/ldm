@@ -184,6 +184,7 @@ github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9
 github.com/go-logfmt/logfmt v0.4.0/go.mod h1:3RMwSq7FuexP4Kalkev3ejPJsZTpXXBr9+V4qmtdjCk=
 github.com/go-logfmt/logfmt v0.5.0/go.mod h1:wCYkCAKZfumFQihp8CzCvQ3paCTfi41vtzG1KdI/P7A=
 github.com/go-micro/plugins/v4/client/grpc v1.1.0 h1:1MlhnyLxlZpzYY7gepj5zGJNn06yL+3OBbDfh0Z6jH0=
+github.com/go-micro/plugins/v4/client/grpc v1.1.0/go.mod h1:7mskyLlKoKT2V5mC4mdBcrpDx+CiLZxXtTMD+jpFuRY=
 github.com/go-micro/plugins/v4/registry/etcd v1.1.0 h1:edKcQMnZc0N7b+PXw796vfoev3Xzj8ZQMLb1s6ptKsg=
 github.com/go-micro/plugins/v4/registry/etcd v1.1.0/go.mod h1:E9Yv0D0Vvhrmz1RhhageTaXVrdqnFZxM7nMY0Kc+7Gc=
 github.com/go-micro/plugins/v4/server/grpc v1.1.1 h1:7V5K8RTQhzzFsJCPkKXTJr4YrWyIw5xebUTtDY27l3k=
