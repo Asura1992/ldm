@@ -21,7 +21,10 @@ import (
 	"time"
 )
 
-var mux = runtime.NewServeMux(runtime.WithMarshalerOption(
+var mux = runtime.NewServeMux(
+	//允许所有头信息
+	runtime.WithIncomingHeaderMatcher(allowHeader),
+	runtime.WithMarshalerOption(
 	runtime.MIMEWildcard,
 	&runtime.JSONPb{
 		MarshalOptions:protojson.MarshalOptions{
@@ -33,6 +36,14 @@ var mux = runtime.NewServeMux(runtime.WithMarshalerOption(
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
+//允许哪些自定义头信息
+func allowHeader(s string) (string, bool) {
+	switch s {
+	case "Ldm":
+		return s,true
+	}
+	return "",false
+}
 //初始化网关
 func initGateway() error{
 	ctx := context.Background()
