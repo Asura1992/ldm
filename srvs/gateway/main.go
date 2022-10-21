@@ -7,6 +7,7 @@ import (
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/protobuf/proto"
 	"go-micro.dev/v4/registry"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -20,10 +21,17 @@ import (
 	"strings"
 	"time"
 )
-
+//响应结构体
+type grpcRsp struct {
+	Code 	int 			`json:"code"`
+	Message string 			`json:"message"`
+	Data    proto.Message 	`json:"data"`
+}
 var mux = runtime.NewServeMux(
 	//允许所有头信息
 	runtime.WithIncomingHeaderMatcher(allowHeader),
+	//错误响应组装器
+	runtime.WithErrorHandler(errResponseBuilder),
 	runtime.WithMarshalerOption(
 	runtime.MIMEWildcard,
 	&runtime.JSONPb{
@@ -36,6 +44,23 @@ var mux = runtime.NewServeMux(
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
+
+//失败请求响应组装器
+func errResponseBuilder(ctx context.Context, serveMux *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
+	rsp := grpcRsp{
+		Code: -1,
+		Message: strings.ReplaceAll(err.Error(),"rpc error: code = Unknown desc = ",""),
+	}
+	b,err := marshaler.Marshal(rsp)
+	if err != nil{
+		log.Println("错误响应编码失败:",err.Error())
+		return
+	}
+	_,err = writer.Write(b)
+	if err != nil{
+		log.Println("响应输出失败:",err.Error())
+	}
+}
 //允许哪些自定义头信息
 func allowHeader(s string) (string, bool) {
 	switch s {
