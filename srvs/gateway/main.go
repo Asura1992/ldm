@@ -33,20 +33,11 @@ var mux = runtime.NewServeMux(runtime.WithMarshalerOption(
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
-func run() error {
+//初始化网关
+func initGateway() error{
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	if err := InitGateway(ctx);err != nil{
-		return err
-	}
-	fmt.Println("gateway http listen on :" , config.GlobalConfig.HttpPort)
-	listenAddr := fmt.Sprintf(":%d",config.GlobalConfig.HttpPort)
-	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
-	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"))
-}
-//初始化网关
-func InitGateway(ctx context.Context) error{
 	cfg := config.GlobalConfig
 	reg := etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))
 	regSrvs,err := reg.ListServices(func(options *registry.ListOptions) {
@@ -63,7 +54,10 @@ func InitGateway(ctx context.Context) error{
 	}
 	//监听服务变化重新注册端点
 	wathServiceChange(ctx,reg)
-	return nil
+	//http监听服务启动
+	listenAddr := fmt.Sprintf(":%d",config.GlobalConfig.HttpPort)
+	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
+	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"))
 }
 //注册端点
 func registerEndpoint(ctx context.Context,srv registry.Service)(err error){
@@ -122,7 +116,7 @@ func wathServiceChange(ctx context.Context,reg registry.Registry) error{
 func main() {
 	//初始化配置
 	initalize.InitGlobalConfig()
-	if err := run(); err != nil {
+	if err := initGateway(); err != nil {
 		log.Fatal(err)
 	}
 }
