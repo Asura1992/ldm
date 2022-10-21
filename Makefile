@@ -7,3 +7,11 @@ gateway:
 	cd common/proto && \
 	protoc --proto_path=. --go_out=./gateway/  --go-grpc_out=./gateway/  --grpc-gateway_out=./gateway/   hello.proto && \
     protoc --proto_path=. --go_out=./gateway/  --go-grpc_out=./gateway/  --grpc-gateway_out=./gateway/   project.proto
+h:
+	go run ./srvs/hello
+
+p:
+	go run ./srvs/project
+
+g:
+	go run ./srvs/gateway

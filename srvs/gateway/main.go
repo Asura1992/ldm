@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-micro/plugins/v4/registry/etcd"
+	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"go-micro.dev/v4/registry"
 	"google.golang.org/grpc"
@@ -20,14 +21,9 @@ import (
 	"time"
 )
 
-
-func run() error {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-	mux := runtime.NewServeMux(runtime.WithMarshalerOption(
-		runtime.MIMEWildcard,
-		&runtime.JSONPb{
+var mux = runtime.NewServeMux(runtime.WithMarshalerOption(
+	runtime.MIMEWildcard,
+	&runtime.JSONPb{
 		MarshalOptions:protojson.MarshalOptions{
 			UseProtoNames:   true,
 			UseEnumNumbers:  true,
@@ -37,7 +33,11 @@ func run() error {
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
-	if err := RegisterSrvEndpoint(ctx,mux);err != nil{
+func run() error {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	if err := InitGateway(ctx);err != nil{
 		return err
 	}
 	fmt.Println("gateway http listen on :" , config.GlobalConfig.HttpPort)
@@ -45,8 +45,8 @@ func run() error {
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
 	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"))
 }
-//注册服务端点供http调用
-func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
+//初始化网关
+func InitGateway(ctx context.Context) error{
 	cfg := config.GlobalConfig
 	reg := etcd.NewRegistry(registry.Addrs(strings.Split(cfg.Etcd.Address,",")...))
 	regSrvs,err := reg.ListServices(func(options *registry.ListOptions) {
@@ -55,26 +55,70 @@ func RegisterSrvEndpoint(ctx context.Context,mux *runtime.ServeMux) error{
 	if err != nil{
 		log.Fatal(err)
 	}
-	opts := []grpc.DialOption{grpc.WithInsecure()}
 	//遍历所有etcd注册的服务
 	for _,srv := range regSrvs{
-		for _,node := range srv.Nodes{
-			endpoint := flag.String(srv.Name,node.Address, srv.Name)
-			switch srv.Name {
-			case constant.API_PROJECT_SRV://项目服务
-				err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
-			case constant.API_HELLO_SRV://hello服务
-				err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
-			}
-			if err != nil {
-				return err
-			}
-			fmt.Println(srv.Name + " 服务注册端点地址 "+node.Address)
+		if err = registerEndpoint(ctx,*srv);err != nil{
+			return err
 		}
+	}
+	//监听服务变化重新注册端点
+	wathServiceChange(ctx,reg)
+	return nil
+}
+//注册端点
+func registerEndpoint(ctx context.Context,srv registry.Service)(err error){
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	for _,node := range srv.Nodes{
+		endpoint := flag.String(srv.Name + uuid.New().String(),node.Address, srv.Name)
+		switch srv.Name {
+		case constant.API_PROJECT_SRV://项目服务
+			err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+		case constant.API_HELLO_SRV://hello服务
+			err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+		}
+		if err != nil {
+			return err
+		}
+		fmt.Println(srv.Name + " 服务注册端点地址 "+node.Address)
 	}
 	return nil
 }
-
+//监听服务变化
+func wathServiceChange(ctx context.Context,reg registry.Registry) error{
+	w,err := reg.Watch(func(options *registry.WatchOptions) {
+		options.Context = ctx
+		//options.Service = constant.API_HELLO_SRV //不写则监听所有服务
+	})
+	if err != nil{
+		return err
+	}
+	go func() {
+		defer func() {
+			if err := recover();err != nil{
+				log.Println("捕获异常:",err)
+			}
+		}()
+		for {
+			rs ,err := w.Next()
+			if err != nil{
+				log.Println("etcd服务监听程序错误:",err)
+				return
+			}
+			fmt.Println(rs.Service.Name,"服务发生变化，变化动作为:",rs.Action)
+			//如果是创建则重新注册端点
+			if rs.Action == "create"{
+				srvs,err := reg.GetService(rs.Service.Name)
+				if err != nil{
+					log.Println(err.Error())
+				}
+				for _,srv := range srvs{
+					registerEndpoint(ctx,*srv)
+				}
+			}
+		}
+	}()
+	return nil
+}
 func main() {
 	//初始化配置
 	if err := initalize.InitGlobalConfig();err != nil{
