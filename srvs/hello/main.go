@@ -15,7 +15,9 @@ func main(){
 	//初始化数据库
 	initalize.InitMysql()
 	service :=initalize.InitService(constant.API_HELLO_SRV)
-	if err := hello.RegisterHelloHandler(service.Server(),impl.NewHelloImplImpl(grpc.NewClient()));err != nil{
+	//因为服务grpc服务，所以不能使用 service.client()
+	cli := grpc.NewClient()
+	if err := hello.RegisterHelloHandler(service.Server(),impl.NewHelloImplImpl(cli));err != nil{
 		log.Fatal(err)
 	}
 	if err := service.Run();err != nil{

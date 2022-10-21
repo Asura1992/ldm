@@ -15,7 +15,9 @@ func main(){
 	//初始化数据库
 	initalize.InitMysql()
 	service :=initalize.InitService(constant.API_PROJECT_SRV)
-	if err := project.RegisterProjectHandler(service.Server(),impl.NewProjectImpl(grpc.NewClient()));err != nil{
+	//因为服务grpc服务，所以不能使用 service.client()
+	cli := grpc.NewClient()
+	if err := project.RegisterProjectHandler(service.Server(),impl.NewProjectImpl(cli));err != nil{
 		log.Fatal(err)
 	}
 	if err := service.Run();err != nil{
