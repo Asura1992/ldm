@@ -1,9 +1,7 @@
 package impl
 
 import (
-	"context"
 	"go-micro.dev/v4/client"
-	"ldm/common/protos/hello"
 )
 
 type HelloImpl struct {
