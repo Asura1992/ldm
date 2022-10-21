@@ -121,9 +121,7 @@ func wathServiceChange(ctx context.Context,reg registry.Registry) error{
 }
 func main() {
 	//初始化配置
-	if err := initalize.InitGlobalConfig();err != nil{
-		log.Fatal(err)
-	}
+	initalize.InitGlobalConfig()
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}

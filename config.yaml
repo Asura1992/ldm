@@ -1,4 +1,15 @@
-http_port : 8081
+http_port : 8081 #对外api接口端口号
 http_timeout : 60 #http请求超时时间（秒）
+
+#服务注册中心
 etcd :
   address: 127.0.0.1:2379 #多地址用，号分割 例如 127.0.0.1:2379,192.168.0.14:2379
+
+#数据库
+database:
+  user_name: root
+  user_passwd: root
+  address: 172.24.35.233:3306
+  db_name: seal_reviews
+  debug: false
+  table_prefix: seal_
