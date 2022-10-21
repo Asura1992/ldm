@@ -99,14 +99,17 @@ func wathServiceChange(ctx context.Context,reg registry.Registry) error{
 				return
 			}
 			fmt.Println(rs.Service.Name,"服务发生变化，变化动作为:",rs.Action)
-			//如果是创建则重新注册端点
-			if rs.Action == "create"{
-				srvs,err := reg.GetService(rs.Service.Name)
-				if err != nil{
-					log.Println(err.Error())
-				}
-				for _,srv := range srvs{
-					registerEndpoint(ctx,*srv)
+			//如果不是创建则跳过
+			if rs.Action != "create"{
+				continue
+			}
+			srvs,err := reg.GetService(rs.Service.Name)
+			if err != nil{
+				log.Println(err.Error())
+			}
+			for _,srv := range srvs{
+				if err = registerEndpoint(ctx,*srv);err  != nil{
+					log.Println("服务:",rs.Service.Name,"重新注册端点失败:",err)
 				}
 			}
 		}
