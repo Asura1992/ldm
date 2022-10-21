@@ -7,7 +7,6 @@ import (
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/protobuf/proto"
 	"go-micro.dev/v4/registry"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -22,10 +21,9 @@ import (
 	"time"
 )
 //响应结构体
-type grpcRsp struct {
+type grpcErrRsp struct {
 	Code 	int 			`json:"code"`
 	Message string 			`json:"message"`
-	Data    proto.Message 	`json:"data"`
 }
 var mux = runtime.NewServeMux(
 	//允许所有头信息
@@ -47,7 +45,7 @@ var mux = runtime.NewServeMux(
 
 //失败请求响应组装器
 func errResponseBuilder(ctx context.Context, serveMux *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
-	rsp := grpcRsp{
+	rsp := grpcErrRsp{
 		Code: -1,
 		Message: strings.ReplaceAll(err.Error(),"rpc error: code = Unknown desc = ",""),
 	}
