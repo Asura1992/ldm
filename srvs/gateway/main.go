@@ -68,7 +68,7 @@ func initGateway() error{
 	//http监听服务启动
 	listenAddr := fmt.Sprintf(":%d",config.GlobalConfig.HttpPort)
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
-	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,"request timeout o(╥﹏╥)o"))
+	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux,connectTimeout,http.ErrHandlerTimeout.Error()))
 }
 //注册端点
 func registerEndpoint(ctx context.Context,srv registry.Service)(err error){
