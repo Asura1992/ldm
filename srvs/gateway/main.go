@@ -38,10 +38,10 @@ var mux = runtime.NewServeMux(
 	}))
 //允许哪些自定义头信息
 func allowHeader(s string) (string, bool) {
-	switch s {
+	/*switch s {
 	case "Ldm":
 		return s,true
-	}
+	}*/
 	return "",false
 }
 //初始化网关
