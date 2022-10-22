@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectClient interface {
-	GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectRsp, error)
+	GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type projectClient struct {
@@ -33,8 +34,8 @@ func NewProjectClient(cc grpc.ClientConnInterface) ProjectClient {
 	return &projectClient{cc}
 }
 
-func (c *projectClient) GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectRsp, error) {
-	out := new(GetProjectRsp)
+func (c *projectClient) GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/project.Project/GetProject", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,7 +47,7 @@ func (c *projectClient) GetProject(ctx context.Context, in *GetProjectReq, opts 
 // All implementations must embed UnimplementedProjectServer
 // for forward compatibility
 type ProjectServer interface {
-	GetProject(context.Context, *GetProjectReq) (*GetProjectRsp, error)
+	GetProject(context.Context, *GetProjectReq) (*emptypb.Empty, error)
 	mustEmbedUnimplementedProjectServer()
 }
 
@@ -54,7 +55,7 @@ type ProjectServer interface {
 type UnimplementedProjectServer struct {
 }
 
-func (UnimplementedProjectServer) GetProject(context.Context, *GetProjectReq) (*GetProjectRsp, error) {
+func (UnimplementedProjectServer) GetProject(context.Context, *GetProjectReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
 }
 func (UnimplementedProjectServer) mustEmbedUnimplementedProjectServer() {}

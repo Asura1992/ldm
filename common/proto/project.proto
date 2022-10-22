@@ -2,9 +2,10 @@ syntax = "proto3";
 package project;
 option go_package = "./protos/project;project";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 //项目服务
 service Project{
-    rpc GetProject(GetProjectReq) returns(GetProjectRsp){
+    rpc GetProject(GetProjectReq) returns(google.protobuf.Empty){
         option (google.api.http) = {
             post: "/project/getProject"
             body: "*"
@@ -14,8 +15,6 @@ service Project{
 message GetProjectReq{
     string name = 1;
 }
-message GetProjectRsp{
-    string msg = 1;
-}
+
 
 
