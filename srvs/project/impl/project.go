@@ -2,13 +2,13 @@ package impl
 
 import (
 	"context"
-	"errors"
 	"ldm/common/protos/project"
+	"net/http"
 )
 
 //获取项目
-func (h ProjectImpl) GetProject(ctx context.Context, req *project.GetProjectReq, rsp *project.GetProjectRsp) error {
+func (p ProjectImpl) GetProject(ctx context.Context, req *project.GetProjectReq, rsp *project.GetProjectRsp) error {
 	rsp.Msg = "project" + req.Name
-	return errors.New("我错了")
+	return CommonGrpcErr(http.StatusUnauthorized,"hahahah")
 }
 
