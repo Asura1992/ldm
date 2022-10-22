@@ -3,12 +3,12 @@ package grpc_err
 import (
 	"encoding/json"
 )
-type selfDefineErr struct {
+type SelfDefineErr struct {
 	Code int `json:"code"`
 	Message  string `json:"message"`
 }
-func (s *selfDefineErr)Error() string{
-	d := selfDefineErr{
+func (s *SelfDefineErr)Error() string{
+	d := SelfDefineErr{
 		Code: s.Code,
 		Message: s.Message,
 	}
@@ -16,7 +16,7 @@ func (s *selfDefineErr)Error() string{
 	return string(b)
 }
 func GrpcErr(status int,msg string)error{
-	return &selfDefineErr{
+	return &SelfDefineErr{
 		Code: status,
 		Message: msg,
 	}
