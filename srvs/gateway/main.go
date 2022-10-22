@@ -38,10 +38,9 @@ var mux = runtime.NewServeMux(
 	}))
 //允许哪些自定义头信息
 func allowHeader(s string) (string, bool) {
-	/*switch s {
-	case "Ldm":
+	if _,ok := constant.MAP_ALLOW_ENTEND_HEADER[s];ok{
 		return s,true
-	}*/
+	}
 	return "",false
 }
 //初始化网关
@@ -112,7 +111,7 @@ func wathServiceChange(ctx context.Context,reg registry.Registry) error{
 				return
 			}
 			//检查是不是自己的服务
-			_,ok := constant.MapServer[rs.Service.Name]
+			_,ok := constant.MAP_SERVER_ARR[rs.Service.Name]
 			if !ok{
 				continue
 			}

@@ -7,7 +7,7 @@ const (
 	API_PROJECT_SRV = "api-project-srv"
 )
 
-var MapServer = map[string]struct{}{
+var MAP_SERVER_ARR = map[string]struct{}{
 	API_HELLO_SRV: {},
 	API_PROJECT_SRV:{},
 }
