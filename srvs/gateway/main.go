@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/go-micro/plugins/v4/registry/etcd"
@@ -16,7 +15,6 @@ import (
 	"ldm/common/proto/gateway/protos/hello"
 	"ldm/common/proto/gateway/protos/project"
 	"ldm/initalize"
-	"ldm/utils/grpc_err"
 	"log"
 	"net/http"
 	"strings"
@@ -25,12 +23,11 @@ import (
 var mux = runtime.NewServeMux(
 	//允许所有头信息
 	runtime.WithIncomingHeaderMatcher(allowHeader),
-	//错误响应组装器
-	runtime.WithErrorHandler(errResponseBuilder),
 	runtime.WithMarshalerOption(
 	runtime.MIMEWildcard,
 	&runtime.JSONPb{
 		MarshalOptions:protojson.MarshalOptions{
+			Multiline: true,
 			UseProtoNames:   true,
 			UseEnumNumbers:  true,
 			EmitUnpopulated: true,
@@ -39,37 +36,6 @@ var mux = runtime.NewServeMux(
 			DiscardUnknown: true, //忽略传入非定义的字段
 		},
 	}))
-
-//失败请求响应组装器
-func errResponseBuilder(ctx context.Context, serveMux *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
-	errMsg := strings.ReplaceAll(err.Error(),"rpc error: code = Unknown desc = ","")
-	if errMsg == ""{
-		b,_ := json.Marshal(grpc_err.SelfDefineErr{
-			Code: -1,
-			Message: "unknown err",
-		})
-		writer.Write(b)
-		return
-	}
-	var errInfo grpc_err.SelfDefineErr
-	if err = json.Unmarshal([]byte(errMsg),&errInfo);err != nil{
-		b,_ := json.Marshal(grpc_err.SelfDefineErr{
-			Code: -1,
-			Message: errMsg,
-		})
-		writer.Write(b)
-		return
-	}
-	if errInfo.Message == ""{
-		errInfo.Message = errMsg
-		errInfo.Code = -1
-	}
-	if errInfo.Code == 0{
-		errInfo.Code = -1
-	}
-	f,_ := json.Marshal(errInfo)
-	writer.Write(f)
-}
 //允许哪些自定义头信息
 func allowHeader(s string) (string, bool) {
 	switch s {
