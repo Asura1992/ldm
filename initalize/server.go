@@ -14,8 +14,8 @@ func InitService(srvName string) micro.Service {
 	service := micro.NewService(
 		micro.Server(grpcsvr.NewServer()),//这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(srvName),
-		micro.RegisterInterval(time.Second * 15),
-		micro.RegisterTTL(time.Second * 30),
+		micro.RegisterInterval(time.Second * 5),
+		micro.RegisterTTL(time.Second * 10),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address,",")...))),
 	)
 	service.Init()
