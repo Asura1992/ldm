@@ -80,6 +80,8 @@ func registerEndpoint(ctx context.Context,srv registry.Service)(err error){
 			err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 		case constant.API_HELLO_SRV://hello服务
 			err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+		default:
+			return nil
 		}
 		if err != nil {
 			return err
