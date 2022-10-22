@@ -6,3 +6,8 @@ const (
 	//项目服务
 	API_PROJECT_SRV = "api-project-srv"
 )
+
+var MapServer = map[string]struct{}{
+	API_HELLO_SRV: {},
+	API_PROJECT_SRV:{},
+}

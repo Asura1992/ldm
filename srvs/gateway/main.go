@@ -111,7 +111,11 @@ func wathServiceChange(ctx context.Context,reg registry.Registry) error{
 				log.Println("etcd服务监听程序错误:",err)
 				return
 			}
-			fmt.Println(rs.Service.Name,"服务发生变化，变化动作为:",rs.Action)
+			//检查是不是自己的服务
+			_,ok := constant.MapServer[rs.Service.Name]
+			if !ok{
+				continue
+			}
 			//如果不是创建则跳过
 			if rs.Action != "create"{
 				continue
