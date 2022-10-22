@@ -6,6 +6,6 @@ import (
 )
 //say hello
 func (h HelloImpl) Hello(ctx context.Context, req *hello.HelloReq, rsp *hello.HelloRsp) error {
-	rsp.Msg = "hello" + req.Name
+	rsp.Msg = "地瓜" + req.Name
 	return nil
 }

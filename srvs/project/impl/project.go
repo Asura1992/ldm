@@ -2,13 +2,14 @@ package impl
 
 import (
 	"context"
-	"fmt"
+	"ldm/common/constant"
+	"ldm/common/protos/hello"
 	"ldm/common/protos/project"
 )
 
 //获取项目
 func (p ProjectImpl) GetProject(ctx context.Context, req *project.GetProjectReq, rsp *project.GetProjectRsp) error {
-	rsp.Msg = "project" + req.Name
-	fmt.Println("hahahaha")
+	r,_ := hello.NewHelloService(constant.API_HELLO_SRV,p.client).Hello(ctx,&hello.HelloReq{Name: "hjsdjfhksjfh"})
+	rsp.Msg = r.Msg
 	return nil
 }
