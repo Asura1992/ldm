@@ -6,7 +6,7 @@ import (
 	"ldm/common/dao"
 	"ldm/common/protos/project"
 	"ldm/initalize"
-	"ldm/srvs/project/impl"
+	"ldm/srvs/project/srv"
 	"log"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	service := initalize.InitService(constant.API_PROJECT_SRV, initalize.WrapHandle)
 	//因为服务grpc服务，所以不能使用 service.client()
 	cli := grpc.NewClient()
-	if err := project.RegisterProjectHandler(service.Server(), impl.NewProjectImpl(cli, dao.Db)); err != nil {
+	if err := project.RegisterProjectHandler(service.Server(), srv.NewProjectImpl(cli, dao.Db)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {

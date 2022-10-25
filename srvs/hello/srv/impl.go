@@ -1,17 +1,17 @@
-package impl
+package srv
 
 import (
 	"go-micro.dev/v4/client"
 	"gorm.io/gorm"
 )
 
-type ProjectImpl struct {
+type HelloImpl struct {
 	client client.Client
 	db     *gorm.DB
 }
 
-func NewProjectImpl(cli client.Client, db *gorm.DB) *ProjectImpl {
-	return &ProjectImpl{
+func NewHelloImplImpl(cli client.Client, db *gorm.DB) *HelloImpl {
+	return &HelloImpl{
 		client: cli,
 		db:     db,
 	}

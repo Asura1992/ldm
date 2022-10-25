@@ -6,7 +6,7 @@ import (
 	"ldm/common/dao"
 	"ldm/common/protos/hello"
 	"ldm/initalize"
-	"ldm/srvs/hello/impl"
+	"ldm/srvs/hello/srv"
 	"log"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	service := initalize.InitService(constant.API_HELLO_SRV)
 	//因为服务grpc服务，所以不能使用 service.client()
 	cli := grpc.NewClient()
-	if err := hello.RegisterHelloHandler(service.Server(), impl.NewHelloImplImpl(cli, dao.Db)); err != nil {
+	if err := hello.RegisterHelloHandler(service.Server(), srv.NewHelloImplImpl(cli, dao.Db)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {
