@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/go-micro/plugins/v4/client/grpc"
 	"ldm/common/constant"
 	"ldm/common/dao"
 	"ldm/common/protos/hello"
@@ -19,9 +18,7 @@ func main() {
 	initalize.InitMysql()
 	//初始化服务
 	service := initalize.InitService(constant.API_HELLO_SRV)
-	//因为服务grpc服务，所以不能使用 service.client()
-	cli := grpc.NewClient()
-	if err := hello.RegisterHelloHandler(service.Server(), srv.NewHelloImplImpl(cli, dao.Db)); err != nil {
+	if err := hello.RegisterHelloHandler(service.Server(), srv.NewHelloImplImpl(service.Client(), dao.Db)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {

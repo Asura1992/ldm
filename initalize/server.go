@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	grpc_cli "github.com/go-micro/plugins/v4/client/grpc"
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/go-micro/plugins/v4/server/grpc"
 	"go-micro.dev/v4"
@@ -23,6 +24,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
 		micro.Version("latest"),
+		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address, ",")...))),
 	}
 	//拦截器
