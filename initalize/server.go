@@ -45,7 +45,7 @@ func WrapHandle(fn server.HandlerFunc) server.HandlerFunc {
 		if !b {
 			return errors.New("metadata not found")
 		}
-		fmt.Println(md)
+		fmt.Println("拦截器打印：", md)
 		//TODO 拦截设置,可根据token验证是否合理请求,如果合法，则像下面把程序想要的数据写进上下文
 		//ctx = metadata.Set(ctx, "ShopInfo", "6666666666666666666666666666")
 		//通过验证调用服务
