@@ -32,6 +32,11 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 	return service
 }
 
+type ShopInfo struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 //拦截器
 func WrapHandle(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
