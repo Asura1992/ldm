@@ -9,7 +9,7 @@ etcd :
 database:
   user_name: root
   user_passwd: root
-  address: 172.24.35.233:3306
+  address: 172.30.84.186:3306
   db_name: seal_reviews
   debug: false
   table_prefix: seal_
