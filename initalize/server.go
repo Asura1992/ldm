@@ -25,6 +25,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 		micro.Version("latest"),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address, ",")...))),
 	}
+	//拦截器
 	if len(WrapHandler) > 0 {
 		microOpt = append(microOpt, micro.WrapHandler(WrapHandler[0]))
 	}
@@ -52,7 +53,7 @@ func WrapHandle(fn server.HandlerFunc) server.HandlerFunc {
 		//通过验证调用服务
 		if err := fn(ctx, req, rsp); err != nil {
 			//TODO 写日志
-			return err
+			return errors.New(err.Error())
 		}
 		return nil
 	}
