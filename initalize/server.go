@@ -18,6 +18,7 @@ import (
 
 //初始化服务
 func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Service {
+	etcdAddrArray := strings.Split(config.GlobalConfig.Etcd.Address, ",")
 	microOpt := []micro.Option{
 		micro.Server(grpc.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(srvName),
@@ -25,7 +26,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
 		micro.Version("latest"),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
-		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address, ",")...))),
+		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
 	//拦截器
 	if len(WrapHandler) > 0 {
