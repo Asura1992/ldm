@@ -22,6 +22,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 		micro.Name(srvName),
 		micro.RegisterInterval(time.Second * 5),
 		micro.RegisterTTL(time.Second * 10),
+		micro.Version("latest"),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address, ",")...))),
 	}
 	if len(WrapHandler) > 0 {
