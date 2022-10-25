@@ -5,11 +5,15 @@ http_timeout : 60 #http请求超时时间（秒）
 etcd :
   address: 127.0.0.1:2379 #多地址用，号分割 例如 127.0.0.1:2379,192.168.0.14:2379
 
-#数据库
+# mysql数据库
 database:
-  user_name: root
-  user_passwd: root
-  address: 172.30.84.186:3306
-  db_name: seal_reviews
-  debug: false
-  table_prefix: seal_
+  user_name: root #数据库用户名
+  user_passwd: root #数据库用户密码
+  address: 172.30.84.186:3306 #数据库地址
+  db_name: seal_reviews #数据库名
+  debug: false #debug模式
+  table_prefix: seal_ #数据表前缀
+#redis数据库
+redis:
+  address: 172.30.84.186:6379 #地址
+  db: 0 #默认使用第一个数据库

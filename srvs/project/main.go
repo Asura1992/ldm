@@ -13,6 +13,8 @@ import (
 func main() {
 	//初始化配置
 	initalize.InitGlobalConfig()
+	//初始化redis
+	initalize.InitRedis()
 	//初始化数据库
 	initalize.InitMysql()
 	//初始化服务
