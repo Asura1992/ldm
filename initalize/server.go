@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-micro/plugins/v4/registry/etcd"
-	grpcsvr "github.com/go-micro/plugins/v4/server/grpc"
+	"github.com/go-micro/plugins/v4/server/grpc"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/metadata"
 	"go-micro.dev/v4/registry"
@@ -18,10 +18,10 @@ import (
 //初始化服务
 func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Service {
 	microOpt := []micro.Option{
-		micro.Server(grpcsvr.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
+		micro.Server(grpc.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(srvName),
-		micro.RegisterInterval(time.Second * 5),
-		micro.RegisterTTL(time.Second * 10),
+		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
+		micro.RegisterTTL(time.Second * 10),     //10秒过期
 		micro.Version("latest"),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(strings.Split(config.GlobalConfig.Etcd.Address, ",")...))),
 	}
