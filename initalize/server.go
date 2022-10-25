@@ -52,6 +52,7 @@ func WrapHandle(fn server.HandlerFunc) server.HandlerFunc {
 		//通过验证调用服务
 		err := fn(ctx, req, rsp)
 		if err != nil {
+			//TODO 写日志
 			return err
 		}
 		return nil
