@@ -119,6 +119,7 @@ func wathServiceChange(ctx context.Context, reg registry.Registry) error {
 			if !ok {
 				continue
 			}
+			fmt.Println("检测到服务:", rs.Service.Name, "版本:", rs.Service.Version, "发生变化，动作为:", rs.Action)
 			//如果不是创建则跳过
 			if rs.Action != "create" {
 				continue
