@@ -13,6 +13,8 @@ type Config struct {
 	Database Database `mapstructure:"database"`
 	//redis
 	Redis Redis `mapstructure:"redis"`
+	//mns
+	Mns Mns `mapstructure:"mns"`
 }
 type Etcd struct {
 	Address string `mapstructure:"address"`
@@ -28,4 +30,10 @@ type Database struct {
 type Redis struct {
 	Address string `mapstructure:"address"`
 	Db      int    `mapstructure:"db"`
+}
+type Mns struct {
+	Url             string `mapstructure:"url"`
+	AccessKeyId     string `mapstructure:"access_key_id"`
+	AccessKeySecret string `mapstructure:"access_key_secret"`
+	Env             string `mapstructure:"env"`
 }

@@ -17,3 +17,9 @@ database:
 redis:
   address: 172.30.84.186:6379 #地址
   db: 0 #默认使用第一个数据库
+#mns队列
+mns:
+  url: xxxxx
+  access_key_id: xxxx
+  access_key_secret: xxxxx
+  env: develop
