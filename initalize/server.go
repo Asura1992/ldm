@@ -15,7 +15,7 @@ import (
 	"go-micro.dev/v4/server"
 	"io"
 	"ldm/common/config"
-	"ldm/common/jaeger"
+	"ldm/utils/jaeger"
 	"strings"
 	"time"
 )
