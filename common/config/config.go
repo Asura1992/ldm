@@ -15,7 +15,14 @@ type Config struct {
 	Redis Redis `mapstructure:"redis"`
 	//mns
 	Mns Mns `mapstructure:"mns"`
+	//链路追踪
+	Jaeger Jaeger `mapstructure:"jaeger"`
 }
+
+type Jaeger struct {
+	JaegerTracerAddr string `mapstructure:"jaeger_tracer_addr"`
+}
+
 type Etcd struct {
 	Address string `mapstructure:"address"`
 }

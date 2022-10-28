@@ -13,20 +13,21 @@ import (
 	"go-micro.dev/v4/metadata"
 	"go-micro.dev/v4/registry"
 	"go-micro.dev/v4/server"
+	"io"
 	"ldm/common/config"
 	"ldm/common/jaeger"
-	"log"
 	"strings"
 	"time"
 )
 
 //初始化服务
-func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Service {
-	_, cl, err := jaeger.NewJaegerTracer(srvName, ":6831")
+func InitService(srvName string, WrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
+	//链路追踪
+	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, config.GlobalConfig.Jaeger.JaegerTracerAddr)
 	if err != nil {
-		log.Fatal(err)
+		return nil, jaegerCloser, err
 	}
-	defer cl.Close()
+	//etcd集群地址
 	etcdAddrArray := strings.Split(config.GlobalConfig.Etcd.Address, ",")
 	microOpt := []micro.Option{
 		micro.Server(grpc.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
@@ -45,7 +46,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 	}
 	service := micro.NewService(microOpt...)
 	service.Init()
-	return service
+	return service, jaegerCloser, nil
 }
 
 type ShopInfo struct {

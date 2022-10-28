@@ -17,7 +17,11 @@ func main() {
 	//初始化数据库
 	initalize.InitMysql()
 	//初始化服务
-	service := initalize.InitService(constant.API_HELLO_SRV)
+	service, jaegerCloser, err := initalize.InitService(constant.API_HELLO_SRV)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jaegerCloser.Close()
 	if err := hello.RegisterHelloHandler(service.Server(), srv.NewHelloImplImpl(service.Client(), dao.Db)); err != nil {
 		log.Fatal(err)
 	}

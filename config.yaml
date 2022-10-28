@@ -23,3 +23,7 @@ mns:
   access_key_id: xxxx
   access_key_secret: xxxxx
   env: develop
+
+#jaeger链路追踪
+jaeger:
+  jaeger_tracer_addr: 127.0.0.1:6831
