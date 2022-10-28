@@ -2,6 +2,15 @@ syntax = "proto3";
 package hello;
 option go_package = "./protos/hello;hello";
 import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+// 定义swagger内容
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+        title: "api-hello-srv服务";
+        version: "1.0";
+    };
+    schemes: HTTP;
+};
 //打招呼服务
 service Hello{
     rpc Hello(HelloReq) returns(HelloRsp){

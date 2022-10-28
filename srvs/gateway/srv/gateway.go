@@ -16,8 +16,11 @@ import (
 	"ldm/common/proto/protos/project"
 	"log"
 	"net/http"
+	"path"
 	"strings"
 	"time"
+	assetfs "github.com/elazarl/go-bindata-assetfs"
+	"ldm/utils/swagger"
 )
 
 var mux = runtime.NewServeMux(
@@ -64,6 +67,8 @@ func InitGateway() error {
 			return err
 		}
 	}
+	//启动swagger
+	//go initSwagger()
 	//监听服务变化重新注册端点
 	wathServiceChange(ctx, reg)
 	//http监听服务启动
@@ -71,7 +76,48 @@ func InitGateway() error {
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
 	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux, connectTimeout, http.ErrHandlerTimeout.Error()))
 }
+//注册swagger
+func initSwagger()error{
+	// register swagger
+	mux := http.NewServeMux()
+	mux.Handle("/", mux)
+	mux.HandleFunc("/swagger/", swaggerFile)
+	swaggerUI(mux)
 
+	err := http.ListenAndServe(":9090", mux)
+	if err != nil {
+		log.Fatalf("failed to Listen: %v", err)
+	}
+	return nil
+}
+/**
+swaggerFile: 提供对swagger.json文件的访问支持
+*/
+func swaggerFile(w http.ResponseWriter, r *http.Request) {
+	if !strings.HasSuffix(r.URL.Path, "swagger.json") {
+		log.Printf("Not Found: %s", r.URL.Path)
+		http.NotFound(w, r)
+		return
+	}
+
+	p := strings.TrimPrefix(r.URL.Path, "/swagger/")
+	name := path.Join("pkg/pb",p)
+	log.Printf("Serving swagger-file: %s", name)
+	http.ServeFile(w, r, name)
+}
+
+/**
+serveSwaggerUI: 提供UI支持
+*/
+func swaggerUI(mux *http.ServeMux) {
+	fileServer := http.FileServer(&assetfs.AssetFS{
+		Asset:    swagger.Asset,
+		AssetDir: swagger.AssetDir,
+		Prefix:   "third_party/swagger-ui",
+	})
+	prefix := "/swagger-ui/"
+	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
+}
 //注册端点
 func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
