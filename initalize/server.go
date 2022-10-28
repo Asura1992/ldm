@@ -7,17 +7,26 @@ import (
 	grpc_cli "github.com/go-micro/plugins/v4/client/grpc"
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/go-micro/plugins/v4/server/grpc"
+	microOpentracing "github.com/go-micro/plugins/v4/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/metadata"
 	"go-micro.dev/v4/registry"
 	"go-micro.dev/v4/server"
 	"ldm/common/config"
+	"ldm/common/jaeger"
+	"log"
 	"strings"
 	"time"
 )
 
 //初始化服务
 func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Service {
+	_, cl, err := jaeger.NewJaegerTracer(srvName, ":6831")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cl.Close()
 	etcdAddrArray := strings.Split(config.GlobalConfig.Etcd.Address, ",")
 	microOpt := []micro.Option{
 		micro.Server(grpc.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
@@ -28,6 +37,8 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) micro.Ser
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
+	//服务端链路追踪
+	microOpt = append(microOpt, micro.WrapHandler(microOpentracing.NewHandlerWrapper(opentracing.GlobalTracer())))
 	//拦截器
 	if len(WrapHandler) > 0 {
 		microOpt = append(microOpt, micro.WrapHandler(WrapHandler[0]))

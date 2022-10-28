@@ -9,13 +9,13 @@ etcd :
 database:
   user_name: root #数据库用户名
   user_passwd: root #数据库用户密码
-  address: 172.30.87.212:3306 #数据库地址
+  address: 172.30.84.186:3306 #数据库地址
   db_name: seal_reviews #数据库名
   debug: false #debug模式
   table_prefix: seal_ #数据表前缀
 #redis数据库
 redis:
-  address: 172.30.87.212:6379 #地址
+  address: 172.30.84.186:6379 #地址
   db: 0 #默认使用第一个数据库
 #mns队列
 mns:
