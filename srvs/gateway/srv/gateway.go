@@ -15,7 +15,7 @@ import (
 	"ldm/common/constant"
 	"ldm/common/proto/protos/hello"
 	"ldm/common/proto/protos/project"
-	"ldm/utils/swagger"
+	"ldm/pkg/ui/data/swagger"
 	"log"
 	"net/http"
 	"path"
@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-var mux = runtime.NewServeMux(
+var gateWayMux = runtime.NewServeMux(
 	//允许所有头信息
 	runtime.WithIncomingHeaderMatcher(allowHeader),
 	runtime.WithMarshalerOption(
@@ -74,21 +74,24 @@ func InitGateway() error {
 	//http监听服务启动
 	listenAddr := fmt.Sprintf(":%d", config.GlobalConfig.HttpPort)
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
-	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux, connectTimeout, http.ErrHandlerTimeout.Error()))
+	return http.ListenAndServe(listenAddr, http.TimeoutHandler(gateWayMux, connectTimeout, http.ErrHandlerTimeout.Error()))
 }
 
 //注册swagger
 func initSwagger() error {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 	// register swagger
-	mux1 := http.NewServeMux()
-	mux1.Handle("/", mux1)
-	mux1.HandleFunc("/swagger/", swaggerFile)
-	swaggerUI(mux1)
-
-	err := http.ListenAndServe(":9090", mux1)
+	mux := http.NewServeMux()
+	mux.Handle("/", gateWayMux)
+	mux.HandleFunc("/swagger/", swaggerFile)
+	swaggerUI(mux)
+	err := http.ListenAndServe(":9090", mux)
 	if err != nil {
-		fmt.Println(err.Error())
-		return err
+		log.Fatal(err)
 	}
 	return nil
 }
@@ -104,7 +107,7 @@ func swaggerFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p := strings.TrimPrefix(r.URL.Path, "/swagger/")
-	name := path.Join("pkg/pb", p)
+	name := path.Join("common/proto/swagger", p)
 	log.Printf("Serving swagger-file: %s", name)
 	http.ServeFile(w, r, name)
 }
@@ -129,9 +132,9 @@ func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 		endpoint := flag.String(srv.Name+uuid.New().String(), node.Address, srv.Name)
 		switch srv.Name {
 		case constant.API_PROJECT_SRV: //项目服务
-			err = project.RegisterProjectHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+			err = project.RegisterProjectHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		case constant.API_HELLO_SRV: //hello服务
-			err = hello.RegisterHelloHandlerFromEndpoint(ctx, mux, *endpoint, opts)
+			err = hello.RegisterHelloHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		default:
 			return nil
 		}
