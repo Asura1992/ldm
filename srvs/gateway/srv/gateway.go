@@ -15,7 +15,7 @@ import (
 	"ldm/common/constant"
 	"ldm/common/proto/protos/hello"
 	"ldm/common/proto/protos/project"
-	"ldm/pkg/ui/data/swagger"
+	"ldm/utils/swagger"
 	"log"
 	"net/http"
 	"path"
@@ -101,7 +101,7 @@ func swaggerFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p := strings.TrimPrefix(r.URL.Path, "/swagger/")
-	name := path.Join("common/proto/swagger", p)
+	name := path.Join("common/swagger", p)
 	log.Printf("Serving swagger-file: %s", name)
 	http.ServeFile(w, r, name)
 }
@@ -113,7 +113,7 @@ func swaggerUI(mux *http.ServeMux) {
 	fileServer := http.FileServer(&assetfs.AssetFS{
 		Asset:    swagger.Asset,
 		AssetDir: swagger.AssetDir,
-		Prefix:   "third_party/swagger-ui",
+		Prefix:   "common/swagger-ui",
 	})
 	prefix := "/swagger-ui/"
 	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
