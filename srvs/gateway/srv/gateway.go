@@ -79,17 +79,11 @@ func InitGateway() error {
 
 //注册swagger
 func initSwagger() error {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println(err)
-		}
-	}()
-	// register swagger
 	mux := http.NewServeMux()
 	mux.Handle("/", gateWayMux)
 	mux.HandleFunc("/swagger/", swaggerFile)
 	swaggerUI(mux)
-	err := http.ListenAndServe(":9090", mux)
+	err := http.ListenAndServe(config.GlobalConfig.Swagger.SwaggerAddr, mux)
 	if err != nil {
 		log.Fatal(err)
 	}
