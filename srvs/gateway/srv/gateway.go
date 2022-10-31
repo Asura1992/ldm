@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -14,13 +15,12 @@ import (
 	"ldm/common/constant"
 	"ldm/common/proto/protos/hello"
 	"ldm/common/proto/protos/project"
+	"ldm/utils/swagger"
 	"log"
 	"net/http"
 	"path"
 	"strings"
 	"time"
-	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"ldm/utils/swagger"
 )
 
 var mux = runtime.NewServeMux(
@@ -68,7 +68,7 @@ func InitGateway() error {
 		}
 	}
 	//启动swagger
-	//go initSwagger()
+	go initSwagger()
 	//监听服务变化重新注册端点
 	wathServiceChange(ctx, reg)
 	//http监听服务启动
@@ -76,20 +76,23 @@ func InitGateway() error {
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
 	return http.ListenAndServe(listenAddr, http.TimeoutHandler(mux, connectTimeout, http.ErrHandlerTimeout.Error()))
 }
-//注册swagger
-func initSwagger()error{
-	// register swagger
-	mux := http.NewServeMux()
-	mux.Handle("/", mux)
-	mux.HandleFunc("/swagger/", swaggerFile)
-	swaggerUI(mux)
 
-	err := http.ListenAndServe(":9090", mux)
+//注册swagger
+func initSwagger() error {
+	// register swagger
+	mux1 := http.NewServeMux()
+	mux1.Handle("/", mux1)
+	mux1.HandleFunc("/swagger/", swaggerFile)
+	swaggerUI(mux1)
+
+	err := http.ListenAndServe(":9090", mux1)
 	if err != nil {
-		log.Fatalf("failed to Listen: %v", err)
+		fmt.Println(err.Error())
+		return err
 	}
 	return nil
 }
+
 /**
 swaggerFile: 提供对swagger.json文件的访问支持
 */
@@ -101,7 +104,7 @@ func swaggerFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p := strings.TrimPrefix(r.URL.Path, "/swagger/")
-	name := path.Join("pkg/pb",p)
+	name := path.Join("pkg/pb", p)
 	log.Printf("Serving swagger-file: %s", name)
 	http.ServeFile(w, r, name)
 }
@@ -118,6 +121,7 @@ func swaggerUI(mux *http.ServeMux) {
 	prefix := "/swagger-ui/"
 	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
 }
+
 //注册端点
 func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
