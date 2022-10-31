@@ -21,9 +21,11 @@ service Hello{
     };
 }
 message HelloReq{
+    //名字
     string name = 1;
 }
 message HelloRsp{
+    //消息
     string msg = 1;
 }
 

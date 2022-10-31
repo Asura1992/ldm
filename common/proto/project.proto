@@ -12,9 +12,11 @@ service Project{
     };
 }
 message GetProjectReq{
+    //名字
     string name = 1;
 }
 message GetProjectRsp{
+    //消息
     string msg = 1;
 }
 
