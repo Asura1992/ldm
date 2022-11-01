@@ -7,7 +7,7 @@ import "protoc-gen-swagger/options/annotations.proto";
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     info: {
         title: "api-project-srv服务";
-        version: "1.0";
+        version: "v1.10";
     };
     schemes: HTTP;
 };
