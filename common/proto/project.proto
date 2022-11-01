@@ -2,6 +2,15 @@ syntax = "proto3";
 package project;
 option go_package = "./protos/project;project";
 import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+// 定义swagger内容
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+        title: "api-project-srv服务";
+        version: "1.0";
+    };
+    schemes: HTTP;
+};
 //项目服务
 service Project{
     rpc GetProject(GetProjectReq) returns(GetProjectRsp){
