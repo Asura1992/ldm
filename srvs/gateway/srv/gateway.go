@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-micro/plugins/v4/registry/etcd"
 	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -15,10 +14,8 @@ import (
 	"ldm/common/constant"
 	"ldm/common/proto/protos/hello"
 	"ldm/common/proto/protos/project"
-	"ldm/utils/swagger"
 	"log"
 	"net/http"
-	"path"
 	"strings"
 	"time"
 )
@@ -39,14 +36,6 @@ var gateWayMux = runtime.NewServeMux(
 				DiscardUnknown: true, //忽略传入非定义的字段
 			},
 		}))
-
-//允许哪些自定义头信息
-func allowHeader(s string) (string, bool) {
-	if _, ok := constant.MAP_ALLOW_ENDPOINT_HEADER[s]; ok {
-		return s, true
-	}
-	return "", false
-}
 
 //初始化网关
 func InitGateway() error {
@@ -77,48 +66,6 @@ func InitGateway() error {
 	return http.ListenAndServe(listenAddr, http.TimeoutHandler(gateWayMux, connectTimeout, http.ErrHandlerTimeout.Error()))
 }
 
-//注册swagger
-func initSwagger() error {
-	mux := http.NewServeMux()
-	mux.Handle("/", gateWayMux)
-	mux.HandleFunc("/swagger/", swaggerFile)
-	swaggerUI(mux)
-	err := http.ListenAndServe(config.GlobalConfig.Swagger.SwaggerAddr, mux)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return nil
-}
-
-/**
-swaggerFile: 提供对swagger.json文件的访问支持
-*/
-func swaggerFile(w http.ResponseWriter, r *http.Request) {
-	if !strings.HasSuffix(r.URL.Path, "swagger.json") {
-		log.Printf("Not Found: %s", r.URL.Path)
-		http.NotFound(w, r)
-		return
-	}
-
-	p := strings.TrimPrefix(r.URL.Path, "/swagger/")
-	name := path.Join("common/swagger", p)
-	log.Printf("Serving swagger-file: %s", name)
-	http.ServeFile(w, r, name)
-}
-
-/**
-serveSwaggerUI: 提供UI支持
-*/
-func swaggerUI(mux *http.ServeMux) {
-	fileServer := http.FileServer(&assetfs.AssetFS{
-		Asset:    swagger.Asset,
-		AssetDir: swagger.AssetDir,
-		Prefix:   "common/swagger-ui",
-	})
-	prefix := "/swagger-ui/"
-	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
-}
-
 //注册端点
 func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
@@ -137,50 +84,5 @@ func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 		}
 		fmt.Println(srv.Name + " 服务注册端点地址 " + node.Address)
 	}
-	return nil
-}
-
-//监听服务变化
-func wathServiceChange(ctx context.Context, reg registry.Registry) error {
-	w, err := reg.Watch(func(options *registry.WatchOptions) {
-		options.Context = ctx
-		//options.Service = constant.API_HELLO_SRV //不写则监听所有服务
-	})
-	if err != nil {
-		return err
-	}
-	go func() {
-		defer func() {
-			if err := recover(); err != nil {
-				log.Println("捕获异常:", err)
-			}
-		}()
-		for {
-			rs, err := w.Next()
-			if err != nil {
-				log.Println("etcd服务监听程序错误:", err)
-				return
-			}
-			//检查是不是自己的服务
-			_, ok := constant.MAP_SERVER_ARR[rs.Service.Name]
-			if !ok {
-				continue
-			}
-			fmt.Println("检测到服务:", rs.Service.Name, "版本:", rs.Service.Version, "发生变化，动作为:", rs.Action)
-			//如果不是创建则跳过
-			if rs.Action != "create" {
-				continue
-			}
-			srvs, err := reg.GetService(rs.Service.Name)
-			if err != nil {
-				log.Println(err.Error())
-			}
-			for _, srv := range srvs {
-				if err = registerEndpoint(ctx, *srv); err != nil {
-					log.Println("服务:", rs.Service.Name, "重新注册端点失败:", err)
-				}
-			}
-		}
-	}()
 	return nil
 }
