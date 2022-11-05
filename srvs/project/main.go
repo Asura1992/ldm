@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer jaegerCloser.Close()
-	if err := project.RegisterProjectHandler(service.Server(), srv.NewProjectImpl(service.Client(), dao.Db)); err != nil {
+	if err := project.RegisterProjectMicroHandler(service.Server(), srv.NewProjectImpl(service.Client(), dao.Db)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {

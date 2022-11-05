@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer jaegerCloser.Close()
-	if err := hello.RegisterHelloHandler(service.Server(), srv.NewHelloImplImpl(service.Client(), dao.Db)); err != nil {
+	if err := hello.RegisterHelloMicroHandler(service.Server(), srv.NewHelloImplImpl(service.Client(), dao.Db)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {
