@@ -4,7 +4,11 @@ http_timeout : 60 #http请求超时时间（秒）
 #服务注册中心
 etcd :
   address: 127.0.0.1:2379 #集群etcd多地址用，号分割 例如 127.0.0.1:2379,192.168.0.14:2379
-
+#授权
+jwt :
+  sign_key : jshdfjkkjdk144dfsg452a1sd1a5s4f4 #key
+  expire : 3600  #过期时间（秒）
+  issuer : Laodaming
 # mysql数据库
 database:
   user_name: root #数据库用户名

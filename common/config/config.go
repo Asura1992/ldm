@@ -9,6 +9,8 @@ type Config struct {
 	HttpTimeout int `mapstructure:"http_timeout"`
 	//注册中心
 	Etcd Etcd `mapstructure:"etcd"`
+	//jwt授权
+	Jwt Jwt `mapstructure:"jwt"`
 	//mysql数据库配置
 	Database Database `mapstructure:"database"`
 	//redis
@@ -31,6 +33,13 @@ type Jaeger struct {
 type Etcd struct {
 	Address string `mapstructure:"address"`
 }
+
+type Jwt struct {
+	SignKey string `mapstructure:"sign_key"`
+	Expire  int64  `mapstructure:"expire"`
+	Issuer  string `mapstructure:"issuer"`
+}
+
 type Database struct {
 	UserName    string `mapstructure:"user_name"`
 	UserPasswd  string `mapstructure:"user_passwd"`
