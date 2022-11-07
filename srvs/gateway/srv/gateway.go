@@ -59,7 +59,7 @@ func InitGateway() error {
 	//启动swagger
 	go initSwagger()
 	//监听服务变化重新注册端点
-	wathServiceChange(ctx, reg)
+	go wathServiceChange(ctx, reg)
 	//http监听服务启动
 	listenAddr := fmt.Sprintf(":%d", config.GlobalConfig.HttpPort)
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
