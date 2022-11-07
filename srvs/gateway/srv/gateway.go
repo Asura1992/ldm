@@ -82,7 +82,7 @@ func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 		if err != nil {
 			return err
 		}
-		fmt.Println(srv.Name + " 服务注册端点地址 " + node.Address)
+		fmt.Println(srv.Name + " 服务注册端点地址:" + node.Address ,"版本:"+srv.Version)
 	}
 	return nil
 }
