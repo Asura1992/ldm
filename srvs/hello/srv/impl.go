@@ -2,17 +2,17 @@ package srv
 
 import (
 	"go-micro.dev/v4/client"
-	"gorm.io/gorm"
+	"ldm/srvs/hello/model"
 )
 
 type HelloImpl struct {
 	client client.Client
-	db     *gorm.DB
+	repo   *model.HelloModel
 }
 
-func NewHelloImplImpl(cli client.Client, db *gorm.DB) *HelloImpl {
+func NewHelloImplImpl(cli client.Client, repo *model.HelloModel) *HelloImpl {
 	return &HelloImpl{
 		client: cli,
-		db:     db,
+		repo:   repo,
 	}
 }

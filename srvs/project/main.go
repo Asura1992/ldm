@@ -5,6 +5,7 @@ import (
 	"ldm/common/dao"
 	"ldm/common/protos/project"
 	"ldm/initalize"
+	"ldm/srvs/project/model"
 	"ldm/srvs/project/srv"
 	"log"
 )
@@ -22,7 +23,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer jaegerCloser.Close()
-	if err := project.RegisterProjectMicroHandler(service.Server(), srv.NewProjectImpl(service.Client(), dao.Db)); err != nil {
+	repo := model.NewProjectModel(dao.Db)
+	if err := project.RegisterProjectMicroHandler(service.Server(), srv.NewProjectImpl(service.Client(), repo)); err != nil {
 		log.Fatal(err)
 	}
 	if err := service.Run(); err != nil {
