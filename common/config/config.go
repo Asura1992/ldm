@@ -3,12 +3,14 @@ package config
 var GlobalConfig Config
 
 type Config struct {
-	//注册中心
-	Etcd Etcd `mapstructure:"etcd"`
+	//版本
+	Version string `json:"version"`
 	//对外开放访问端口
 	HttpPort int `mapstructure:"http_port"`
 	//请求超时
 	HttpTimeout int `mapstructure:"http_timeout"`
+	//注册中心
+	Etcd Etcd `mapstructure:"etcd"`
 	//mysql数据库配置
 	Database Database `mapstructure:"database"`
 	//redis

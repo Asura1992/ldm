@@ -22,19 +22,20 @@ import (
 
 //初始化服务
 func InitService(srvName string, WrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
+	cfg := config.GlobalConfig
 	//链路追踪
-	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, config.GlobalConfig.Jaeger.JaegerTracerAddr)
+	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
 	if err != nil {
 		return nil, jaegerCloser, err
 	}
 	//etcd集群地址
-	etcdAddrArray := strings.Split(config.GlobalConfig.Etcd.Address, ",")
+	etcdAddrArray := strings.Split(cfg.Etcd.Address, ",")
 	microOpt := []micro.Option{
 		micro.Server(grpc.NewServer()), //这个要加上，不然grpc网关路由调用不会等待返回
 		micro.Name(srvName),
 		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
-		micro.Version("latest"),
+		micro.Version(cfg.Version),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
