@@ -2,15 +2,15 @@ package srv
 
 import (
 	"go-micro.dev/v4/client"
-	"ldm/srvs/hello/model"
+	"ldm/srvs/hello/repos"
 )
 
 type HelloImpl struct {
 	client client.Client
-	repo   *model.HelloModel
+	repo   *repos.HelloModel
 }
 
-func NewHelloImplImpl(cli client.Client, repo *model.HelloModel) *HelloImpl {
+func NewHelloImplImpl(cli client.Client, repo *repos.HelloModel) *HelloImpl {
 	return &HelloImpl{
 		client: cli,
 		repo:   repo,
