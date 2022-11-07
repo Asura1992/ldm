@@ -35,7 +35,7 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) (micro.Se
 		micro.Name(srvName),
 		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
-		micro.Version(cfg.Version),
+		micro.Version(time.Now().Format("2006-01-02 15:04:05")),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
