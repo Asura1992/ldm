@@ -11,14 +11,14 @@ import (
 )
 
 //注册swagger
-func initSwagger(){
+func initSwagger() {
 	mux := http.NewServeMux()
 	mux.Handle("/", gateWayMux)
 	mux.HandleFunc("/swagger/", swaggerFile)
 	swaggerUI(mux)
 	err := http.ListenAndServe(config.GlobalConfig.Swagger.SwaggerAddr, mux)
 	if err != nil {
-		zap.S().Error("failed to initSwagger:",err.Error())
+		zap.S().Error("failed to initSwagger:", err.Error())
 	}
 }
 

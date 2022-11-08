@@ -18,7 +18,7 @@ func main() {
 	//初始化数据库
 	initalize.InitMysql()
 	//初始化服务
-	service, jaegerCloser, err := initalize.InitService(constant.API_PROJECT_SRV, initalize.AuthWrapHandle)
+	service, jaegerCloser, err := initalize.InitService(constant.API_PROJECT_SRV)
 	if err != nil {
 		log.Fatal(err)
 	}
