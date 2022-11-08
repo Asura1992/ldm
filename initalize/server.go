@@ -30,11 +30,15 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		micro.Name(srvName),
 		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
-		micro.Version(time.Now().Format("2006-01-02 15:04:05")),
+		micro.Version("latest"),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
 	//服务端链路追踪
+	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
+	if err != nil {
+		return nil, jaegerCloser, err
+	}
 	microOpt = append(microOpt, micro.WrapHandler(microOpentracing.NewHandlerWrapper(opentracing.GlobalTracer())))
 	//拦截器
 	if len(authWrapHandler) > 0 {
@@ -42,11 +46,6 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 	}
 	service := micro.NewService(microOpt...)
 	service.Init()
-	//链路追踪
-	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
-	if err != nil {
-		return nil, jaegerCloser, err
-	}
 	return service, jaegerCloser, nil
 }
 
