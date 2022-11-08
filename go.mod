@@ -11,6 +11,7 @@ require (
 	github.com/go-micro/plugins/v4/server/grpc v1.1.1
 	github.com/go-micro/plugins/v4/wrapper/trace/opentracing v1.1.0
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/glog v1.0.0
 	github.com/golang/protobuf v1.5.2
 	github.com/google/uuid v1.2.0
@@ -20,6 +21,7 @@ require (
 	github.com/spf13/viper v1.13.0
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	go-micro.dev/v4 v4.9.0
+	go.uber.org/zap v1.23.0
 	google.golang.org/genproto v0.0.0-20221014213838-99cd37c6964a
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.1
@@ -55,7 +57,6 @@ require (
 	github.com/gogap/errors v0.0.0-20210818113853-edfbba0ddea9 // indirect
 	github.com/gogap/stack v0.0.0-20150131034635-fef68dddd4f8 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
@@ -94,7 +95,6 @@ require (
 	go.etcd.io/etcd/client/v3 v3.5.4 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20221010152910-d6f0a8c073c2 // indirect
 	golang.org/x/net v0.0.0-20221004154528-8021a29435af // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect

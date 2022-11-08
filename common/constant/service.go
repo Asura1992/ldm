@@ -2,12 +2,15 @@ package constant
 
 const (
 	//招呼服务
-	API_HELLO_SRV   = "api-hello-srv"
+	API_HELLO_SRV = "api-hello-srv"
 	//项目服务
 	API_PROJECT_SRV = "api-project-srv"
+	//直播间服务
+	API_LIVEROOM_SRV = "api-liveroom-srv"
 )
 
 var MAP_SERVER_ARR = map[string]struct{}{
-	API_HELLO_SRV: {},
-	API_PROJECT_SRV:{},
+	API_HELLO_SRV:    {},
+	API_PROJECT_SRV:  {},
+	API_LIVEROOM_SRV: {},
 }

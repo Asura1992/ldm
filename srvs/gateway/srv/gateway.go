@@ -13,6 +13,7 @@ import (
 	"ldm/common/config"
 	"ldm/common/constant"
 	"ldm/common/protos/hello"
+	"ldm/common/protos/liveroom"
 	"ldm/common/protos/project"
 	"log"
 	"net/http"
@@ -76,13 +77,15 @@ func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 			err = project.RegisterProjectHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		case constant.API_HELLO_SRV: //hello服务
 			err = hello.RegisterHelloHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
+		case constant.API_LIVEROOM_SRV: //hello服务
+			err = liveroom.RegisterLiveroomHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		default:
 			return nil
 		}
 		if err != nil {
 			return err
 		}
-		fmt.Println(srv.Name + " 服务注册端点地址:" + node.Address ,"版本:"+srv.Version)
+		fmt.Println(srv.Name+" 服务注册端点地址:"+node.Address, "版本:"+srv.Version)
 	}
 	return nil
 }

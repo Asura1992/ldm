@@ -1,0 +1,31 @@
+syntax = "proto3";
+package liveroom;
+option go_package = "./protos/liveroom;liveroom";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+// 定义swagger内容
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+        title: "api-liveroom-srv服务";
+        version: "v1.10";
+    };
+    schemes: HTTP;
+};
+//打招呼服务
+service Liveroom{
+    rpc GetLiveroom(GetLiveroomReq) returns(GetLiveroomRsp){
+        option (google.api.http) = {
+            get: "/liveroom/getLiveroom"
+        };
+    };
+}
+message GetLiveroomReq{
+    //名字
+    string name = 1;
+}
+message GetLiveroomRsp{
+    //消息
+    string msg = 1;
+}
+
+
