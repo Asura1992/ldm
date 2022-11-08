@@ -21,7 +21,7 @@ import (
 )
 
 //初始化服务
-func InitService(srvName string, WrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
+func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
 	cfg := config.GlobalConfig
 	//链路追踪
 	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
@@ -42,8 +42,8 @@ func InitService(srvName string, WrapHandler ...server.HandlerWrapper) (micro.Se
 	//服务端链路追踪
 	microOpt = append(microOpt, micro.WrapHandler(microOpentracing.NewHandlerWrapper(opentracing.GlobalTracer())))
 	//拦截器
-	if len(WrapHandler) > 0 {
-		microOpt = append(microOpt, micro.WrapHandler(WrapHandler[0]))
+	if len(authWrapHandler) > 0 {
+		microOpt = append(microOpt, micro.WrapHandler(authWrapHandler[0]))
 	}
 	service := micro.NewService(microOpt...)
 	service.Init()
@@ -56,7 +56,7 @@ type ShopInfo struct {
 }
 
 //拦截器
-func WrapHandle(fn server.HandlerFunc) server.HandlerFunc {
+func AuthWrapHandle(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
 		//获取头信息
 		md, b := metadata.FromContext(ctx)
