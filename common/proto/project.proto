@@ -3,6 +3,7 @@ package project;
 option go_package = "./protos/project;project";
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
+import "google/protobuf/empty.proto";
 // 定义swagger内容
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     info: {
@@ -17,6 +18,11 @@ service Project{
         option (google.api.http) = {
             post: "/project/getProject"
             body: "*"
+        };
+    };
+    rpc DelProject(google.protobuf.Empty) returns(google.protobuf.Empty){
+        option (google.api.http) = {
+            get: "/project/delProject"
         };
     };
 }
