@@ -1,6 +1,7 @@
 package srv
 
 import (
+	"fmt"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"go.uber.org/zap"
 	"ldm/common/config"
@@ -16,6 +17,7 @@ func initSwagger() {
 	mux.Handle("/", gateWayMux)
 	mux.HandleFunc("/swagger/", swaggerFile)
 	swaggerUI(mux)
+	fmt.Println(config.GlobalConfig.Swagger.SwaggerAddr)
 	err := http.ListenAndServe(config.GlobalConfig.Swagger.SwaggerAddr, mux)
 	if err != nil {
 		zap.S().Error("failed to initSwagger:", err.Error())
