@@ -23,11 +23,6 @@ import (
 //初始化服务
 func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
 	cfg := config.GlobalConfig
-	//链路追踪
-	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
-	if err != nil {
-		return nil, jaegerCloser, err
-	}
 	//etcd集群地址
 	etcdAddrArray := strings.Split(cfg.Etcd.Address, ",")
 	microOpt := []micro.Option{
@@ -47,6 +42,11 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 	}
 	service := micro.NewService(microOpt...)
 	service.Init()
+	//链路追踪
+	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
+	if err != nil {
+		return nil, jaegerCloser, err
+	}
 	return service, jaegerCloser, nil
 }
 
