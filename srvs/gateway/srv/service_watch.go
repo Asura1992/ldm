@@ -12,7 +12,7 @@ import (
 func wathServiceChange(ctx context.Context, reg registry.Registry) {
 	defer func() {
 		if err := recover(); err != nil {
-			zap.S().Error("捕获异常:",err)
+			zap.S().Error("捕获异常:", err)
 		}
 	}()
 	w, err := reg.Watch(func(options *registry.WatchOptions) {
@@ -20,7 +20,7 @@ func wathServiceChange(ctx context.Context, reg registry.Registry) {
 		//options.Service = constant.API_HELLO_SRV //不写则监听所有服务
 	})
 	if err != nil {
-		zap.S().Error("watch service err:",err)
+		zap.S().Error("watch service err:", err)
 		return
 	}
 	for {
@@ -36,12 +36,12 @@ func wathServiceChange(ctx context.Context, reg registry.Registry) {
 		}
 		fmt.Println("检测到服务:", rs.Service.Name, "版本:", rs.Service.Version, "发生变化，动作为:", rs.Action)
 		//如果不是创建则跳过
-		if rs.Action != "create" {
+		/*if rs.Action != "create" || {
 			continue
-		}
+		}*/
 		srvs, err := reg.GetService(rs.Service.Name)
 		if err != nil {
-			zap.S().Error("get service err:",err.Error())
+			zap.S().Error("get service err:", err.Error())
 			continue
 		}
 		for _, srv := range srvs {

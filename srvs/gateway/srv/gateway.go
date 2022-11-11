@@ -69,7 +69,7 @@ func InitGateway() error {
 
 //注册端点
 func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
-	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts := []grpc.DialOption{grpc.WithInsecure(), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`)}
 	for _, node := range srv.Nodes {
 		endpoint := flag.String(srv.Name+uuid.New().String(), node.Address, srv.Name)
 		switch srv.Name {
