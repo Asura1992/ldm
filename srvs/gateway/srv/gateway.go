@@ -77,7 +77,7 @@ func registerEndpoint(ctx context.Context, srv registry.Service) (err error) {
 			err = project.RegisterProjectHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		case constant.API_HELLO_SRV: //hello服务
 			err = hello.RegisterHelloHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
-		case constant.API_LIVEROOM_SRV: //hello服务
+		case constant.API_LIVEROOM_SRV: //liveroom服务
 			err = liveroom.RegisterLiveroomHandlerFromEndpoint(ctx, gateWayMux, *endpoint, opts)
 		default:
 			return nil
