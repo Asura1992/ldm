@@ -30,7 +30,7 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		micro.Name(srvName),
 		micro.RegisterInterval(time.Second * 5), //每5秒重新注册
 		micro.RegisterTTL(time.Second * 10),     //10秒过期
-		micro.Version("latest"),
+		micro.Version(time.Now().Format("2006-01-02 15:04:05")),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
 	}
@@ -45,6 +45,10 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		microOpt = append(microOpt, micro.WrapHandler(authWrapHandler[0]))
 	}
 	service := micro.NewService(microOpt...)
+	//优雅退出
+	service.Server().Init(
+		server.Wait(nil),
+	)
 	service.Init()
 	return service, jaegerCloser, nil
 }
