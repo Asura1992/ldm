@@ -16,8 +16,7 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 service Project{
     rpc GetProject(GetProjectReq) returns(GetProjectRsp){
         option (google.api.http) = {
-            post: "/project/getProject"
-            body: "*"
+            get: "/project/getProject"
         };
     };
     rpc DelProject(google.protobuf.Empty) returns(google.protobuf.Empty){
