@@ -15,6 +15,6 @@ func (p *ProjectImpl) GetProject(ctx context.Context, req *project.GetProjectReq
 	return nil
 }
 
-func (p *ProjectImpl) DelProject(ctx context.Context, empty *emptypb.Empty, empty2 *emptypb.Empty) error {
+func (p *ProjectImpl) DelProject(ctx context.Context, req *emptypb.Empty, rsp *emptypb.Empty) error {
 	return nil
 }
