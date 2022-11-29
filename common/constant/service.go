@@ -9,8 +9,8 @@ const (
 	API_LIVEROOM_SRV = "api-liveroom-srv"
 )
 
-var MAP_SERVER_ARR = map[string]struct{}{
-	API_HELLO_SRV:    {},
-	API_PROJECT_SRV:  {},
-	API_LIVEROOM_SRV: {},
+var MAP_SERVER_ARR = map[string]int{
+	API_HELLO_SRV:    9507,
+	API_PROJECT_SRV:  9508,
+	API_LIVEROOM_SRV: 9509,
 }

@@ -15,6 +15,7 @@ import (
 	"go-micro.dev/v4/server"
 	"io"
 	"ldm/common/config"
+	"ldm/common/constant"
 	"ldm/utils/jaeger"
 	"strings"
 	"time"
@@ -33,6 +34,7 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		micro.Version(time.Now().Format("2006-01-02 15:04:05")),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
+		micro.Address(fmt.Sprintf(":%d", constant.MAP_SERVER_ARR[srvName])), //单机先写死对应端口
 	}
 	//服务端链路追踪
 	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)

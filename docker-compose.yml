@@ -10,6 +10,17 @@ services:
             - ./config/:/opt/config/
         ports:
             - "8081:8081"
+    api-hello-srv:
+        restart: always
+        container_name: api-hello-srv
+        build:
+            dockerfile: ./srvs/hello/Dockerfile
+        command: ""
+        volumes:
+            - ./config/:/opt/config/
+        ports:
+            - "9507:9507"
+
     api-project-srv:
         restart: always
         container_name: api-project-srv
@@ -19,5 +30,14 @@ services:
         volumes:
             - ./config/:/opt/config/
         ports:
-            - "8086:8081"
-
+            - "9508:9508"
+    api-liveroom-srv:
+        restart: always
+        container_name: api-liveroom-srv
+        build:
+            dockerfile: ./srvs/liveroom/Dockerfile
+        command: ""
+        volumes:
+            - ./config/:/opt/config/
+        ports:
+            - "9509:9509"
