@@ -24,7 +24,7 @@ redis:
 #mns队列
 mns:
   url: xxxxx
-  access_key_id: xxxx
+  access_key_id: xxxxxx
   access_key_secret: xxxxx
   env: develop
 

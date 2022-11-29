@@ -7,9 +7,8 @@ import (
 	"log"
 )
 
-
 //获取配置
-func InitGlobalConfig(){
+func InitGlobalConfig() {
 	configFileName := "config.yaml"
 	v := viper.New()
 	// 设置文件路径
@@ -17,12 +16,13 @@ func InitGlobalConfig(){
 	if err := v.ReadInConfig(); err != nil {
 		log.Fatal(err)
 	}
-	if err := v.Unmarshal(&config.GlobalConfig);err != nil{
+	if err := v.Unmarshal(&config.GlobalConfig); err != nil {
 		log.Fatal(err)
 	}
 	// 动态监控变化
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
+		log.Println("配置文件产生变化：", in.Name)
 		_ = v.ReadInConfig()
 		_ = v.Unmarshal(&config.GlobalConfig)
 	})

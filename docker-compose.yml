@@ -1,0 +1,23 @@
+version: '3'
+services:
+    api-gateway-srv:
+        restart: always
+        container_name: api-gateway-srv
+        build:
+          dockerfile: ./srvs/gateway/Dockerfile
+        command: ""
+        volumes:
+            - ./config/:/opt/config/
+        ports:
+            - "8081:8081"
+    api-project-srv:
+        restart: always
+        container_name: api-project-srv
+        build:
+            dockerfile: ./srvs/project/Dockerfile
+        command: ""
+        volumes:
+            - ./config/:/opt/config/
+        ports:
+            - "8086:8081"
+
