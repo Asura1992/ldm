@@ -33,7 +33,7 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		micro.Version(time.Now().Format("2006-01-02 15:04:05")),
 		micro.Client(grpc_cli.NewClient()), //client要用grpc的
 		micro.Registry(etcd.NewRegistry(registry.Addrs(etcdAddrArray...))),
-		micro.Address(fmt.Sprintf(":%d", constant.MAP_SERVER_ARR[srvName])), //单机先写死对应端口
+		micro.Address(fmt.Sprintf(":%d", constant.MAP_SERVER_ARR[srvName])), //没上k8s先自定义接口
 	}
 	//服务端链路追踪
 	if cfg.Jaeger.Enabled {
