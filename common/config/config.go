@@ -24,10 +24,12 @@ type Config struct {
 }
 type Swagger struct {
 	SwaggerAddr string `mapstructure:"swagger_addr"`
+	Enabled     bool   `mapstructure:"enabled"`
 }
 
 type Jaeger struct {
 	JaegerTracerAddr string `mapstructure:"jaeger_tracer_addr"`
+	Enabled          bool   `mapstructure:"enabled"`
 }
 
 type Etcd struct {

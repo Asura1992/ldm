@@ -13,7 +13,6 @@ import (
 	"go-micro.dev/v4/metadata"
 	"go-micro.dev/v4/registry"
 	"go-micro.dev/v4/server"
-	"io"
 	"ldm/common/config"
 	"ldm/common/constant"
 	"ldm/utils/jaeger"
@@ -22,7 +21,7 @@ import (
 )
 
 //初始化服务
-func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micro.Service, io.Closer, error) {
+func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micro.Service, error) {
 	cfg := config.GlobalConfig
 	//etcd集群地址
 	etcdAddrArray := strings.Split(cfg.Etcd.Address, ",")
@@ -37,9 +36,11 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		micro.Address(fmt.Sprintf(":%d", constant.MAP_SERVER_ARR[srvName])), //单机先写死对应端口
 	}
 	//服务端链路追踪
-	_, jaegerCloser, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
-	if err != nil {
-		return nil, jaegerCloser, err
+	if cfg.Jaeger.Enabled {
+		_, _, err := jaeger.NewJaegerTracer(srvName, cfg.Jaeger.JaegerTracerAddr)
+		if err != nil {
+			return nil, err
+		}
 	}
 	microOpt = append(microOpt, micro.WrapHandler(microOpentracing.NewHandlerWrapper(opentracing.GlobalTracer())))
 	//拦截器
@@ -52,7 +53,7 @@ func InitService(srvName string, authWrapHandler ...server.HandlerWrapper) (micr
 		server.Wait(nil),
 	)
 	service.Init()
-	return service, jaegerCloser, nil
+	return service, nil
 }
 
 type ShopInfo struct {

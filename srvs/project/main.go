@@ -18,11 +18,10 @@ func main() {
 	//初始化数据库
 	initalize.InitMysql()
 	//初始化服务
-	service, jaegerCloser, err := initalize.InitService(constant.API_PROJECT_SRV, initalize.AuthWrapHandle)
+	service, err := initalize.InitService(constant.API_PROJECT_SRV, initalize.AuthWrapHandle)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer jaegerCloser.Close()
 	repo := repos.NewProjectModel(dao.Db)
 	if err := project.RegisterProjectMicroHandler(service.Server(), srv.NewProjectImpl(service.Client(), repo)); err != nil {
 		log.Fatal(err)

@@ -18,11 +18,10 @@ func main() {
 	//初始化数据库
 	initalize.InitMysql()
 	//初始化服务
-	service, jaegerCloser, err := initalize.InitService(constant.API_LIVEROOM_SRV)
+	service, err := initalize.InitService(constant.API_LIVEROOM_SRV)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer jaegerCloser.Close()
 	repo := repos.NewLiveroomModel(dao.Db)
 	if err := liveroom.RegisterLiveroomMicroHandler(service.Server(), srv.NewLiveroomImpl(service.Client(), repo)); err != nil {
 		log.Fatal(err)
