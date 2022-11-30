@@ -7,13 +7,16 @@ proto:
 
 #启动网关服务
 g:
-	go run ./srvs/gateway
+	docker-compose build --force-rm api-gateway-srv
 #启动hello服务
 h:
-	go run ./srvs/hello
+	docker-compose build --force-rm api-hello-srv
 #启动项目服务
 p:
-	go run ./srvs/project
+	docker-compose build --force-rm api-project-srv
 #启动房间服务
 l:
-	go run ./srvs/liveroom
+	docker-compose build --force-rm api-liveroom-srv
+
+up:
+	docker-compose up

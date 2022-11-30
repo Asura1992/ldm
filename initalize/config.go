@@ -22,7 +22,7 @@ func InitGlobalConfig() {
 	// 动态监控变化
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
-		log.Println("配置文件产生变化：", in.Name)
+		log.Println("配置" + in.Name + "文件产生变化")
 		_ = v.ReadInConfig()
 		_ = v.Unmarshal(&config.GlobalConfig)
 	})

@@ -24,8 +24,8 @@ redis:
 #mns队列
 mns:
   url: xxxxx
-  access_key_id: xxxxxx
-  access_key_secret: xxxxx
+  access_key_id: xxxx
+  access_key_secret: xxxxxx
   env: develop
 
 #jaeger链路追踪

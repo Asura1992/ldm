@@ -7,6 +7,6 @@ import (
 
 //say hello
 func (h *HelloImpl) Hello(ctx context.Context, req *hello.HelloReq, rsp *hello.HelloRsp) error {
-	rsp.Msg = "地瓜" + req.Name
+	rsp.Msg = "我是老六777：" + req.Name
 	return nil
 }
