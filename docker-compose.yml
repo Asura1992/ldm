@@ -1,16 +1,5 @@
 version: '3'
 services:
-    api-gateway-srv:
-        restart: always
-        container_name: api-gateway-srv
-        build:
-          dockerfile: ./srvs/gateway/Dockerfile
-        command: ""
-        volumes:
-            - ./config/:/opt/config/
-        ports:
-            - "8081:8081"
-            - "9091:9091"
     api-hello-srv:
         restart: always
         container_name: api-hello-srv
