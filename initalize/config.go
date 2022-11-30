@@ -9,7 +9,7 @@ import (
 
 //获取配置
 func InitGlobalConfig() {
-	configFileName := "config.yaml"
+	configFileName := "config/config.yaml"
 	v := viper.New()
 	// 设置文件路径
 	v.SetConfigFile(configFileName)
