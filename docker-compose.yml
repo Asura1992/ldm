@@ -14,6 +14,17 @@ services:
         - 16686:16686
         - 14268:14268
         - 9411:9411
+    api-gateway-srv:
+        restart: always
+        container_name: api-gateway-srv
+        build:
+            dockerfile: ./srvs/gateway/Dockerfile
+        command: ""
+        volumes:
+            - ./config/:/opt/config/
+        ports:
+            - 8081:8081
+            - 9091:9091
     api-hello-srv:
         restart: always
         container_name: api-hello-srv
@@ -23,7 +34,7 @@ services:
         volumes:
             - ./config/:/opt/config/
         ports:
-            - "9507:9507"
+            - 9507:9507
     api-project-srv:
         restart: always
         container_name: api-project-srv
@@ -33,7 +44,7 @@ services:
         volumes:
             - ./config/:/opt/config/
         ports:
-            - "9508:9508"
+            - 9508:9508
     api-liveroom-srv:
         restart: always
         container_name: api-liveroom-srv
@@ -43,4 +54,4 @@ services:
         volumes:
             - ./config/:/opt/config/
         ports:
-            - "9509:9509"
+            - 9509:9509

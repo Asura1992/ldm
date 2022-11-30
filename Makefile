@@ -7,7 +7,7 @@ proto:
 
 #网关服务
 g:
-	go run ./srvs/gateway
+	docker-compose build --force-rm api-gateway-srv
 #hello服务
 h:
 	docker-compose build --force-rm api-hello-srv

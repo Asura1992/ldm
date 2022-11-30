@@ -35,4 +35,4 @@ jaeger:
 #swagger
 swagger:
   swagger_addr: 172.22.145.221:9091
-  enabled: true
+  enabled: false
