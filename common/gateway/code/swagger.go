@@ -1,4 +1,4 @@
-package srv
+package code
 
 import (
 	assetfs "github.com/elazarl/go-bindata-assetfs"
