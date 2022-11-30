@@ -3,7 +3,7 @@ http_timeout : 60 #http请求超时时间（秒）
 
 #服务注册中心
 etcd :
-  address: 172.22.145.221:2379 #集群etcd多地址用，号分割 例如 172.22.145.221:2379,192.168.0.14:2379
+  address: 127.0.0.1:2379 #集群etcd多地址用，号分割 例如 127.0.0.1:2379,192.168.0.14:2379
 #授权
 jwt :
   sign_key : jshdfjkkjdk144dfsg452a1sd1a5s4f4 #key
@@ -30,7 +30,7 @@ mns:
 
 #jaeger链路追踪
 jaeger:
-  jaeger_tracer_addr: 172.22.145.221:6831
+  jaeger_tracer_addr: 127.0.0.1:6831
 #swagger
 swagger:
-  swagger_addr: 172.22.145.221:9091
+  swagger_addr: 127.0.0.1:9091
