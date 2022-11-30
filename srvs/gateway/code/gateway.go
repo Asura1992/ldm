@@ -57,8 +57,6 @@ func InitGateway() error {
 			return err
 		}
 	}
-	//启动swagger
-	go initSwagger()
 	//监听服务变化重新注册端点
 	go wathServiceChange(ctx, reg)
 	//http监听服务启动

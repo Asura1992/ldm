@@ -6,5 +6,5 @@ hello 大佬鼠们，welcome to gayhub(O(∩_∩)O)
  http://ip:16686
 
 api文档:
-    浏览器打开 http://ip:9091/swagger-ui/  然后搜索  http://ip:9091/swagger/hello.swagger.json
+    浏览器打开 http://ip:9095/swagger-ui/  然后搜索  http://ip:9095/swagger/hello.swagger.json
         

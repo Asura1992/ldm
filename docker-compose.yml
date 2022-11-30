@@ -14,6 +14,14 @@ services:
         - 16686:16686
         - 14268:14268
         - 9411:9411
+    swagger:
+        image: swaggerapi/swagger-ui:latest
+        restart: always
+        container_name: swagger
+        volumes:
+            - ./common/swagger:/usr/share/nginx/html/swagger
+        ports:
+            - 9095:8080
     api-gateway-srv:
         restart: always
         container_name: api-gateway-srv
