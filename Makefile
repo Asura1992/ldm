@@ -17,6 +17,4 @@ p:
 #房间服务
 l:
 	docker-compose build --force-rm api-liveroom-srv
-#构建并运行容器
-up:
-	docker-compose up
+#删除无用none镜像 docker rmi $(docker images | grep "none" | awk '{print $3}')

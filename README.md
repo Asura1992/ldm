@@ -11,3 +11,4 @@ docker run -d -it --restart=always -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p5775:577
 
 自动文档:
     浏览器打开 http://ip:9091/swagger-ui/  然后搜索  http://ip:9091/swagger/hello.swagger.json
+        
