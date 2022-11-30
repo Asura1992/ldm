@@ -2,9 +2,9 @@ package srv
 
 import (
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"go.uber.org/zap"
 	"ldm/common/config"
 	"ldm/utils/swagger"
+	"log"
 	"net/http"
 	"path"
 	"strings"
@@ -22,7 +22,7 @@ func initSwagger() {
 	swaggerUI(mux)
 	err := http.ListenAndServe(cfg.Swagger.SwaggerAddr, mux)
 	if err != nil {
-		zap.S().Error("failed to initSwagger:", err.Error())
+		log.Fatal("failed to initSwagger:", err.Error())
 	}
 }
 
