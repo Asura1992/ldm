@@ -32,7 +32,3 @@ mns:
 jaeger:
   jaeger_tracer_addr: 172.22.145.221:6831
   enabled: true
-#swagger
-swagger:
-  swagger_addr: 172.22.145.221:9091
-  enabled: false

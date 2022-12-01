@@ -19,12 +19,6 @@ type Config struct {
 	Mns Mns `mapstructure:"mns"`
 	//链路追踪
 	Jaeger Jaeger `mapstructure:"jaeger"`
-	//swagger
-	Swagger Swagger `mapstructure:"swagger"`
-}
-type Swagger struct {
-	SwaggerAddr string `mapstructure:"swagger_addr"`
-	Enabled     bool   `mapstructure:"enabled"`
 }
 
 type Jaeger struct {
