@@ -22,25 +22,25 @@ services:
             - ./common/swagger:/usr/share/nginx/html/swagger
         ports:
             - 9095:8080
-    redis:
-        image: redis:6.0.10
-        restart: always
-        container_name: redis
-        privileged: true
-        command: redis-server /etc/redis/redis.conf
-        ports:
-            - "6379:6379"
-        volumes:
-            - ./redis/redis.conf:/etc/redis/redis.conf
-            - ./redis/data:/data
-    etcd:
-        image: quay.io/coreos/etcd:v3.3.9
-        restart: always
-        container_name: etcd
-        privileged: true
-        command: ""
-        ports:
-            - 2379-2380->2379-2380
+    #redis:
+        #image: redis:6.0.10
+        #restart: always
+        #container_name: redis
+        #privileged: true
+        #command: redis-server /etc/redis/redis.conf
+            #ports:
+            #- "6379:6379"
+            #volumes:
+            #- ./redis/redis.conf:/etc/redis/redis.conf
+            #- ./redis/data:/data
+    #etcd:
+        #image: quay.io/coreos/etcd:v3.3.9
+        #restart: always
+        #container_name: etcd
+        #privileged: true
+        #command: ""
+            #ports:
+            #- 2379-2380->2379-2380
     api-gateway-srv:
         restart: always
         container_name: api-gateway-srv
