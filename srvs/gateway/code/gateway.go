@@ -62,7 +62,7 @@ func InitGateway() error {
 	//http监听服务启动
 	listenAddr := fmt.Sprintf(":%d", config.GlobalConfig.HttpPort)
 	connectTimeout := time.Second * time.Duration(config.GlobalConfig.HttpTimeout)
-	fmt.Println("网关对外访问端口:", listenAddr)
+	fmt.Println("网关对外访问端口", listenAddr)
 	return http.ListenAndServe(listenAddr, http.TimeoutHandler(gateWayMux, connectTimeout, http.ErrHandlerTimeout.Error()))
 }
 
