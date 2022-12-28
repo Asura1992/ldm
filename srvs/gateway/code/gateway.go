@@ -53,6 +53,11 @@ func InitGateway() error {
 	}
 	//遍历所有etcd注册的服务
 	for _, srv := range regSrvs {
+		//检查是不是自己的服务
+		_, ok := constant.MAP_SERVER_ARR[srv.Name]
+		if !ok {
+			continue
+		}
 		if err = registerEndpoint(ctx, *srv); err != nil {
 			return err
 		}
