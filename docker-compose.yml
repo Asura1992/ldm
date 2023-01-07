@@ -45,7 +45,8 @@ services:
         restart: always
         container_name: api-gateway-srv
         build:
-            dockerfile: ./srvs/gateway/Dockerfile
+            context: ./srvs/gateway
+            dockerfile: Dockerfile
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -55,7 +56,8 @@ services:
         restart: always
         container_name: api-hello-srv
         build:
-            dockerfile: ./srvs/hello/Dockerfile
+            context: ./srvs/hello
+            dockerfile: Dockerfile
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -65,7 +67,8 @@ services:
         restart: always
         container_name: api-project-srv
         build:
-            dockerfile: ./srvs/project/Dockerfile
+            context: ./srvs/project
+            dockerfile: Dockerfile
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -75,7 +78,8 @@ services:
         restart: always
         container_name: api-liveroom-srv
         build:
-            dockerfile: ./srvs/liveroom/Dockerfile
+            context: ./srvs/liveroom
+            dockerfile: Dockerfile
         command: ""
         volumes:
             - ./config/:/opt/config/
