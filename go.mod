@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/aliyun/aliyun-mns-go-sdk v1.0.2
-	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/fsnotify/fsnotify v1.5.4
 	github.com/go-micro/plugins/v4/client/grpc v1.1.0
 	github.com/go-micro/plugins/v4/registry/etcd v1.1.0
