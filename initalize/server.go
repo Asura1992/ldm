@@ -16,7 +16,6 @@ import (
 	"ldm/common/config"
 	"ldm/common/constant"
 	"ldm/utils/jaeger"
-	"protoc-gen-micro/plugin/micro"
 	"strings"
 	"time"
 )
