@@ -43,10 +43,7 @@ services:
             #- 2379-2380->2379-2380
     api-gateway-srv:
         restart: always
-        container_name: api-gateway-srv
-        build:
-            context: ./srvs/gateway
-            dockerfile: Dockerfile
+        image: api-gateway-srv:latest
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -54,10 +51,7 @@ services:
             - 8081:8081
     api-hello-srv:
         restart: always
-        container_name: api-hello-srv
-        build:
-            context: ./srvs/hello
-            dockerfile: Dockerfile
+        image: api-hello-srv:latest
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -65,10 +59,7 @@ services:
             - 9507:9507
     api-project-srv:
         restart: always
-        container_name: api-project-srv
-        build:
-            context: ./srvs/project
-            dockerfile: Dockerfile
+        image: api-project-srv:latest
         command: ""
         volumes:
             - ./config/:/opt/config/
@@ -76,10 +67,7 @@ services:
             - 9508:9508
     api-liveroom-srv:
         restart: always
-        container_name: api-liveroom-srv
-        build:
-            context: ./srvs/liveroom
-            dockerfile: Dockerfile
+        image: api-liveroom-srv:latest
         command: ""
         volumes:
             - ./config/:/opt/config/
