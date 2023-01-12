@@ -3,7 +3,7 @@ http_timeout : 60 #http请求超时时间（秒）
 
 #服务注册中心
 etcd :
-  address: 172.27.226.225:2379 #集群etcd多地址用，号分割 例如 172.27.226.225:2379,192.168.0.14:2379
+  address: 172.17.99.0:2379 #集群etcd多地址用，号分割 例如 172.17.99.0:2379,192.168.0.14:2379
 #授权
 jwt :
   sign_key : jshdfjkkjdk144dfsg452a1sd1a5s4f4 #key
@@ -13,13 +13,13 @@ jwt :
 database:
   user_name: root #数据库用户名
   user_passwd: root #数据库用户密码
-  address: 172.27.226.225:3306 #数据库地址
+  address: 172.17.99.0:3306 #数据库地址
   db_name: seal_reviews #数据库名
   debug: false #debug模式
   table_prefix: seal_ #数据表前缀
 #redis数据库
 redis:
-  address: 172.27.226.225:6379 #地址
+  address: 172.17.99.0:6379 #地址
   db: 0 #默认使用第一个数据库
 #mns队列
 mns:
@@ -30,5 +30,5 @@ mns:
 
 #jaeger链路追踪
 jaeger:
-  jaeger_tracer_addr: 172.27.226.225:6831
+  jaeger_tracer_addr: 172.17.99.0:6831
   enabled: true
