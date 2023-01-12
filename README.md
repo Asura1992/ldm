@@ -7,6 +7,6 @@
  http://ip:16686
 
 api文档:
-    浏览器打开 http://ip:9095/swagger-ui/  然后搜索  http://ip:9095/swagger/hello.swagger.json
+    浏览器打开 http://ip:9095  然后搜索  http://ip:9095/swagger/hello.swagger.json
         
 o
